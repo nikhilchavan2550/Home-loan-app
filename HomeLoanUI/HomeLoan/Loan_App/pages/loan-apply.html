@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Application - LoanPro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/loan-apply.css">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-card fade-in">
+            <div class="form-header">
+                <h1 class="form-title">
+                    <i class="bi bi-file-earmark-plus me-2"></i>Loan Application Management
+                </h1>
+                <p class="form-subtitle">Apply for new loans or manage existing applications</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs" id="loanApplicationTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">
+                        <i class="bi bi-plus-circle me-2"></i>Apply New
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button" role="tab">
+                        <i class="bi bi-table me-2"></i>View/Edit Applications
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="loanApplicationTabContent">
+                <!-- Apply New Tab -->
+                <div class="tab-pane fade show active" id="add" role="tabpanel">
+                    <form id="loanApplicationForm">
+                        <div class="form-body">
+                            <!-- Alert Messages -->
+                            <div id="responseMessage" class="alert" style="display: none;" role="alert"></div>
+
+                            <!-- Reference IDs Section -->
+                            <!-- <div class="form-section slide-in">
+                                <h3 class="section-title">
+                                    <i class="bi bi-link-45deg"></i>Reference Information
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="personalId" class="form-label required-field">Personal ID</label>
+                                        <input type="number" class="form-control" id="personalId" required>
+                                        <div class="form-text">Enter personal details ID</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propertyId" class="form-label required-field">Property ID</label>
+                                        <input type="number" class="form-control" id="propertyId" required>
+                                        <div class="form-text">Enter property details ID</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="incomeId" class="form-label required-field">Income ID</label>
+                                        <input type="number" class="form-control" id="incomeId" required>
+                                        <div class="form-text">Enter income details ID</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="documentId" class="form-label required-field">Document ID</label>
+                                        <input type="number" class="form-control" id="documentId" required>
+                                        <div class="form-text">Enter document details ID</div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <!-- Loan Details Section -->
+                            <div class="form-section slide-in">
+                                <h3 class="section-title">
+                                    <i class="bi bi-currency-rupee"></i>Loan Details
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="requestedLoanAmount" class="form-label required-field">Requested Loan Amount (INR)</label>
+                                        <input type="number" class="form-control" id="requestedLoanAmount" min="0" step="0.01" required>
+                                        <div class="form-text">Enter the loan amount you need</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="loanTenureYears" class="form-label required-field">Loan Tenure (Years)</label>
+                                        <input type="number" class="form-control" id="loanTenureYears" min="1" max="30" required>
+                                        <div class="form-text">Enter loan tenure in years</div>
+                                    </div>
+                                    <!-- <div class="col-md-4">
+                                        <label for="interestRate" class="form-label required-field">Interest Rate (%)</label>
+                                        <input type="number" class="form-control" id="interestRate" min="0" max="20" step="0.01" required>
+                                        <div class="form-text">Enter the interest rate</div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <div class="progress-indicator">
+                                <span>Form Progress</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <span id="progressText">0%</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span id="submitText">Submit Loan Application</span>
+                                <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- View/Edit Applications Tab -->
+                <div class="tab-pane fade" id="view" role="tabpanel">
+                    <div class="form-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="section-title">
+                                <i class="bi bi-table"></i>Loan Applications
+                            </h3>
+                            <button class="btn btn-primary" onclick="loadLoanApplications()">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                            </button>
+                        </div>
+                        
+                        <div id="recordsMessage" class="alert" style="display: none;" role="alert"></div>
+                        
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>ID</th>
+                                            <th>Personal ID</th>
+                                            <th>Property ID</th>
+                                            <th>Income ID</th> -->
+                                            <th>Loan Amount</th>
+                                            <th>Tenure</th>
+                                            <!-- <th>Interest Rate</th> -->
+                                            <!-- <th>Status</th> -->
+                                            <th>Application Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="loanApplicationsTableBody">
+                                        <tr>
+                                            <td colspan="11" class="text-center text-muted py-4">
+                                                <i class="bi bi-inbox fs-1"></i>
+                                                <p class="mt-2">No loan applications found. Click "Refresh" to load data.</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Loan Application
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="editId">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="editPersonalId" class="form-label required-field">Personal ID</label>
+                                <input type="number" class="form-control" id="editPersonalId" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="editPropertyId" class="form-label required-field">Property ID</label>
+                                <input type="number" class="form-control" id="editPropertyId" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="editIncomeId" class="form-label required-field">Income ID</label>
+                                <input type="number" class="form-control" id="editIncomeId" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="editDocumentId" class="form-label required-field">Document ID</label>
+                                <input type="number" class="form-control" id="editDocumentId" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editRequestedLoanAmount" class="form-label required-field">Requested Loan Amount (INR)</label>
+                                <input type="number" class="form-control" id="editRequestedLoanAmount" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editLoanTenureYears" class="form-label required-field">Loan Tenure (Years)</label>
+                                <input type="number" class="form-control" id="editLoanTenureYears" min="1" max="30" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editInterestRate" class="form-label required-field">Interest Rate (%)</label>
+                                <input type="number" class="form-control" id="editInterestRate" min="0" max="20" step="0.01" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="updateLoanApplication()">
+                        <i class="bi bi-check-lg me-2"></i>Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- <p>Are you sure you want to delete this loan application?</p> -->
+                    <!-- <p class="text-muted">This action cannot be undone.</p> -->
+                     <p>Cannot delete your loan application, Contact Administration!!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <!-- <button type="button" class="btn btn-danger" onclick="confirmDelete()"> 
+                        <i class="bi bi-trash me-2"></i>Delete
+                    </button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDeleteId = null;
+        const customerData = JSON.parse(localStorage.getItem("customerData"));
+document.addEventListener('DOMContentLoaded', function () {
+    loadLoanApplications();
+    loadAndPrefillFormIfExists();
+});
+
+
+async function loadAndPrefillFormIfExists() {
+    try {
+        const customerData = JSON.parse(localStorage.getItem("customerData"));
+        if (!customerData || !customerData.customerId) return;
+
+        const response = await fetch(`http://localhost:8080/api/loan/by-customer/${customerData.customerId}`);
+        if (!response.ok) return;
+
+        const data = await response.json();
+
+        // If there's an existing application, prefill the form
+        if (Array.isArray(data) && data.length > 0) {
+            // Pick the latest loan record
+            const latest = data.sort((a, b) => b.id - a.id)[0];
+
+            if (latest && latest.requestedLoanAmount) {
+                document.getElementById("requestedLoanAmount").value = latest.requestedLoanAmount || '';
+                document.getElementById("loanTenureYears").value = latest.loanTenureYears || '';
+
+                // Disable inputs
+                const inputs = document.querySelectorAll("#loanApplicationForm input");
+                inputs.forEach(input => input.setAttribute("disabled", "disabled"));
+
+                // Hide submit button
+                const submitBtn = document.querySelector("#loanApplicationForm button[type='submit']");
+                if (submitBtn) submitBtn.style.display = "none";
+
+                // Show info alert
+                const responseDiv = document.getElementById("responseMessage");
+                responseDiv.className = "alert alert-info";
+                responseDiv.innerHTML = `<i class="bi bi-info-circle me-2"></i>You have already applied for a loan. Details are shown below.`;
+                responseDiv.style.display = "block";
+
+                // Update progress bar
+                updateProgress(100);
+            }
+        }
+
+    } catch (error) {
+        console.error("Error pre-filling loan form:", error);
+    }
+}
+
+
+        // Apply New Form Submission
+        document.getElementById("loanApplicationForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const responseDiv = document.getElementById("responseMessage");
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const submitText = document.getElementById("submitText");
+            const submitSpinner = document.getElementById("submitSpinner");
+
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.textContent = "Submitting...";
+            submitSpinner.style.display = "inline-block";
+            responseDiv.style.display = "none";
+
+            const propertyId = localStorage.getItem("propertyid");
+            const incomeId = localStorage.getItem("incomeid");
+
+
+            const formData = {
+            custId: customerData.customerId, // ✅ Parses customerId as integer
+            personalId: customerData.customerId, // ✅ input
+            propertyId: propertyId, // ✅ input
+            incomeId: incomeId, // ✅ input
+            // documentId: customerData.customerId, // ✅ input
+            requestedLoanAmount: parseFloat(document.getElementById("requestedLoanAmount").value), // ✅ float
+            loanTenureYears: parseInt(document.getElementById("loanTenureYears").value), // ✅ input
+            interestRate: 8 // ✅ float
+        };
+
+
+            try {
+                const res = await fetch("http://localhost:8080/api/loan/apply", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                let responseData;
+                const responseText = await res.text();
+
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (e) {
+                    throw new Error(`Invalid JSON response: ${responseText}`);
+                }
+
+                if (!res.ok) {
+                    let errorMessage = 'Failed to submit loan application';
+                    errorMessage = responseData.message || responseData.error || responseText || 'Unknown error occurred';
+                    throw new Error(errorMessage);
+                }
+                
+                if (!res.ok) {
+                    let errorMessage = 'Failed to submit loan application';
+                    try {
+                        const errorData = await res.json();
+                        errorMessage = errorData.message || errorData.error || JSON.stringify(errorData);
+                    } catch (e) {
+                        errorMessage = await res.text() || 'Unknown error occurred';
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                responseDiv.className = "alert alert-success";
+                responseDiv.innerHTML = `
+                    <i class="bi bi-check-circle me-2"></i>
+                    Loan application submitted successfully! Your application has been saved.
+                `;
+                responseDiv.style.display = "block";
+
+                 let latestApplicationId = null;
+        try {
+            const customerData = JSON.parse(localStorage.getItem("customerData"));
+
+            const response = await fetch("http://localhost:8080/api/loan/by-customer/"+customerData.customerId);
+            const data = await response.json();
+
+            const sortedData = data.sort((a, b) => b.id - a.id);
+            latestApplicationId = sortedData[0].id; // ✅ Now accessible outside
+            console.log("Latest Application ID:", latestApplicationId);
+
+        } catch (error) {
+            console.error('Error loading loan applications:', error);
+        }
+
+        // ✅ Use the latest ID here
+        if (latestApplicationId) {
+            try {
+                const statusRes = await fetch(`http://localhost:8082/api/application-status/submit?applicationId=${latestApplicationId}`, {
+                    method: "POST"
+                });
+
+                if (!statusRes.ok) {
+                    console.warn("Status creation failed:", await statusRes.text());
+                } else {
+                    console.log("Status record created for applicationId:", latestApplicationId);
+                }
+            } catch (err) {
+                console.error("Error creating application status:", err);
+            }
+        }
+                
+
+
+                
+                // Reset form on success
+                this.reset();
+                updateProgress(0);
+                
+            } catch (err) {
+                console.error('Submission error:', err);
+                responseDiv.className = "alert alert-danger";
+                responseDiv.innerHTML = `
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Error: ${err.message}
+                `;
+                responseDiv.style.display = "block";
+            } finally {
+                resetSubmitButton();
+            }
+        });
+
+        // Load Loan Applications Records
+        async function loadLoanApplications() {
+    const tableBody = document.getElementById("loanApplicationsTableBody");
+    const messageDiv = document.getElementById("recordsMessage");
+
+    // Get custid from localStorage
+    const customerData = JSON.parse(localStorage.getItem("customerData"));
+    const custid = customerData?.customerId;
+
+    if (!custid) {
+        messageDiv.className = "alert alert-warning";
+        messageDiv.innerHTML = `<i class="bi bi-info-circle me-2"></i> Customer ID not found in local storage.`;
+        messageDiv.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8080/api/loan/by-customer/"+customerData.customerId);
+        const data = await response.json();
+
+        // Filter applications for matching personalId == custid
+        const filtered = data.filter(record => record.personalId === custid);
+
+        if (filtered.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="11" class="text-center text-muted py-4">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mt-2">No matching loan applications found.</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = filtered.map(record => `
+            <tr>
+               
+                <td>₹${record.requestedLoanAmount ? record.requestedLoanAmount.toLocaleString() : 'N/A'}</td>
+                <td>${record.loanTenureYears || 'N/A'} years</td>
+                
+                <td>${record.applicationDate || 'N/A'}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning btn-sm" onclick="editLoanApplication(${record.id})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteLoanApplication(${record.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error('Error loading loan applications:', error);
+        messageDiv.className = "alert alert-danger";
+        messageDiv.innerHTML = `
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Error loading records: ${error.message}
+        `;
+        messageDiv.style.display = "block";
+    }
+}
+
+
+        // Edit Loan Application
+        async function editLoanApplication(id) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/loan/${id}`);
+                const data = await response.json();
+                
+                // Populate edit form
+                document.getElementById("editId").value = data.id;
+                document.getElementById("editPersonalId").value = data.personalId || '';
+                document.getElementById("editPropertyId").value = data.propertyId || '';
+                document.getElementById("editIncomeId").value = data.incomeId || '';
+                document.getElementById("editDocumentId").value = data.documentId || '';
+                document.getElementById("editRequestedLoanAmount").value = data.requestedLoanAmount || '';
+                document.getElementById("editLoanTenureYears").value = data.loanTenureYears || '';
+                document.getElementById("editInterestRate").value = data.interestRate || '';
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('editModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('Error loading loan application for edit:', error);
+                alert('Error loading loan application: ' + error.message);
+            }
+        }
+
+        // Update Loan Application
+        async function updateLoanApplication() {
+            const id = document.getElementById("editId").value;
+            const formData = {
+                personalId: parseInt(document.getElementById("editPersonalId").value),
+                propertyId: parseInt(document.getElementById("editPropertyId").value),
+                incomeId: parseInt(document.getElementById("editIncomeId").value),
+                // documentId: parseInt(document.getElementById("editDocumentId").value),
+                requestedLoanAmount: parseFloat(document.getElementById("editRequestedLoanAmount").value),
+                loanTenureYears: parseInt(document.getElementById("editLoanTenureYears").value),
+                interestRate: parseFloat(document.getElementById("editInterestRate").value)
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/loan/update/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+                    modal.hide();
+                    
+                    // Reload data
+                    loadLoanApplications();
+                    
+                    // Show success message
+                    const messageDiv = document.getElementById("recordsMessage");
+                    messageDiv.className = "alert alert-success";
+                    messageDiv.innerHTML = `
+                        <i class="bi bi-check-circle me-2"></i>
+                        Loan application updated successfully!
+                    `;
+                    messageDiv.style.display = "block";
+
+
+                    
+                    // Hide message after 3 seconds
+                    setTimeout(() => {
+                        messageDiv.style.display = "none";
+                    }, 3000);
+                } else {
+                    throw new Error('Failed to update loan application');
+                }
+            } catch (error) {
+                console.error('Error updating loan application:', error);
+                alert('Error updating loan application: ' + error.message);
+            }
+        }
+
+        // Delete Loan Application
+        function deleteLoanApplication(id) {
+            currentDeleteId = id;
+            const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+
+        // Confirm Delete
+        async function confirmDelete() {
+            if (!currentDeleteId) return;
+            
+            try {
+                const response = await fetch(`http://localhost:8080/api/admin/loan/${currentDeleteId}`, {
+                    method: "DELETE"
+                });
+
+                if (response.ok) {
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                    modal.hide();
+                    
+                    // Reload data
+                    loadLoanApplications();
+                    
+                    // Show success message
+                    const messageDiv = document.getElementById("recordsMessage");
+                    messageDiv.className = "alert alert-success";
+                    messageDiv.innerHTML = `
+                        <i class="bi bi-check-circle me-2"></i>
+                        Loan application deleted successfully!
+                    `;
+                    messageDiv.style.display = "block";
+                    
+                    // Hide message after 3 seconds
+                    setTimeout(() => {
+                        messageDiv.style.display = "none";
+                    }, 3000);
+                } else {
+                    throw new Error('Failed to delete loan application');
+                }
+            } catch (error) {
+                console.error('Error deleting loan application:', error);
+                alert('Error deleting loan application: ' + error.message);
+            }
+        }
+
+        function resetSubmitButton() {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const submitText = document.getElementById("submitText");
+            const submitSpinner = document.getElementById("submitSpinner");
+            
+            submitBtn.disabled = false;
+            submitText.textContent = "Submit Loan Application";
+            submitSpinner.style.display = "none";
+        }
+
+        function updateProgress(percentage) {
+            const progressFill = document.getElementById("progressFill");
+            const progressText = document.getElementById("progressText");
+            
+            progressFill.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}%`;
+        }
+
+        // Real-time form validation and progress tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredFields = document.querySelectorAll('[required]');
+            const allFields = document.querySelectorAll('input, select, textarea');
+            
+            function calculateProgress() {
+                let filledFields = 0;
+                let totalFields = allFields.length;
+                
+                allFields.forEach(field => {
+                    if (field.value.trim() !== '') {
+                        filledFields++;
+                    }
+                });
+                
+                const percentage = Math.round((filledFields / totalFields) * 100);
+                updateProgress(percentage);
+            }
+            
+            allFields.forEach(field => {
+                field.addEventListener('input', calculateProgress);
+                field.addEventListener('change', calculateProgress);
+            });
+            
+            // Initial progress calculation
+            calculateProgress();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account – Orlo Bank</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body class="bg-blue-50 text-blue-950 font-sans">
+
+  <header class="bg-sky-100 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-sky-800">Orlo Bank</h1>
+      <div class="space-x-4">
+        <a href="../index.html" class="text-sky-700 hover:text-sky-900">Features</a>
+        <a href="../Login/customer_login.html" class="text-sky-700 hover:text-sky-900">Login</a>
+        <a href="create_account.html" class="bg-sky-700 text-white px-4 py-2 rounded-full text-sm hover:bg-sky-800">Open
+          Account</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="py-20 bg-sky-50">
+    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-10">
+      <h2 class="text-3xl font-bold text-sky-900 mb-8 text-center">Open a New Account</h2>
+
+      <form id="customerForm" class="space-y-6">
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">Full Name</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">👤</span>
+            <input type="text" id="name" required placeholder="Full Name"
+              class="w-full py-2 outline-none bg-transparent" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">Email</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">📧</span>
+            <input type="email" id="email" required placeholder="you@example.com"
+              class="w-full py-2 outline-none bg-transparent" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">Aadhaar Number</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">🆔</span>
+            <input type="text" id="aadhaar" maxlength="12" required placeholder="12-digit Aadhaar"
+              class="w-full py-2 outline-none bg-transparent" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">PAN Number</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">📝</span>
+            <input type="text" id="pan" maxlength="10" required placeholder="ABCDE1234F"
+              class="w-full py-2 outline-none bg-transparent uppercase" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">Phone Number</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">📱</span>
+            <input type="tel" id="phone" required placeholder="Enter your phone number"
+              class="w-full py-2 outline-none bg-transparent" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">Password</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">🔒</span>
+            <input type="password" id="password" required placeholder="••••••••"
+              class="w-full py-2 outline-none bg-transparent" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sky-800 font-medium mb-1">Confirm Password</label>
+          <div class="flex items-center border rounded-md px-3">
+            <span class="text-gray-500 mr-2">🔐</span>
+            <input type="password" id="confirmPassword" required placeholder="••••••••"
+              class="w-full py-2 outline-none bg-transparent" />
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-sky-700 text-white py-3 rounded-full text-lg font-semibold hover:bg-sky-800 transition">
+          Continue ➡️
+        </button>
+      </form>
+
+      <div id="responseMessage" class="mt-6 text-center font-medium hidden"></div>
+      <div id="loadingMessage" class="hidden mt-8 text-center">
+  <div class="flex items-center justify-center space-x-3">
+    <svg class="animate-spin h-6 w-6 text-sky-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+    </svg>
+    <p class="text-sky-800 font-semibold text-lg">Creating Your Account... Redirecting</p>
+  </div>
+</div>
+    </div>
+  </section>
+
+
+  <footer class="bg-sky-100 py-8 text-center text-sm text-sky-700">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="mb-4">© 2025 Orlo Bank. All rights reserved.</div>
+      <div class="space-x-4">
+        <a href="#" class="hover:underline">Privacy Policy</a>
+        <a href="#" class="hover:underline">Terms of Use</a>
+        <a href="#" class="hover:underline">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const custId = localStorage.getItem("custId");
+
+    if (custId) {
+      window.location.href = "../Dashboard/dashboard.html";
+    }
+    let generatedCustomerId = null;
+
+$("#customerForm").on("submit", function (e) {
+  e.preventDefault();
+
+  const aadhaar = $("#aadhaar").val();
+  const pan = $("#pan").val().toUpperCase();
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+  if (!/^\d{12}$/.test(aadhaar)) {
+    alert("Invalid Aadhaar number. Must be 12 digits.");
+    return;
+  }
+
+  if (!panRegex.test(pan)) {
+    alert("Invalid PAN format.");
+    return;
+  }
+
+  const password = $("#password").val();
+  const confirmPassword = $("#confirmPassword").val();
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  const customer = {
+    name: $("#name").val(),
+    email: $("#email").val(),
+    aadhaarNumber: aadhaar,
+    panNumber: pan,
+    phoneNumber: $("#phone").val(),
+    password: password
+  };
+
+  // Show spinner immediately & hide form
+  $("#customerForm").addClass("hidden");
+  $("#loadingMessage").removeClass("hidden");
+
+  $.ajax({
+    url: "http://localhost:8084/api/bank/create-customer",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(customer),
+    success: function (data) {
+      generatedCustomerId = data.custId;
+      setTimeout(() => {
+        window.location.href = "../Login/customer_login.html";
+      }, 2000);
+    },
+    error: function () {
+      alert("Failed to create customer.");
+      // Show form again if error occurs
+      $("#loadingMessage").addClass("hidden");
+      $("#customerForm").removeClass("hidden");
+    }
+  });
+});
+
+
+  </script>
+
+</body>
+
+</html>

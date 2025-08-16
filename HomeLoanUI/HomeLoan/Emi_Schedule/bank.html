@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oro Bank - Pay EMI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('./imgs/image.png');
+      background-size: 400px;
+      background-repeat: repeat;
+      animation: pan 60s linear infinite;
+    }
+
+    @keyframes pan {
+      from { background-position: 0 0; }
+      to { background-position: 1000px 1000px; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white shadow-xl rounded-2xl max-w-lg w-full p-8 border-t-8 border-green-600">
+    <h1 class="text-3xl font-bold text-green-700 mb-4 text-center">🏦 Orlo Bank EMI Payment</h1>
+
+    <form id="paymentForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Account Number</label>
+        <input type="text" id="accountNumber" required class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">From Bank Account</label>
+        <input type="text" id="fromBankAccount" required class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Amount to Pay</label>
+        <input type="text" step="0.01" id="amount" required class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+      </div>
+
+      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200">Pay Now</button>
+    </form>
+
+    <div id="resultMessage" class="mt-6 text-center font-semibold text-lg text-gray-800"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('paymentForm');
+    const resultMessage = document.getElementById('resultMessage');
+
+    const TO_BANK_ACCOUNT = 2159842451;
+
+    function getQueryParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const accountInput = document.getElementById("accountNumber");
+      const amountInput = document.getElementById("amount");
+
+      const accountNumber = getQueryParam("accountNumber");
+      const amount = getQueryParam("amount");
+
+      if (accountNumber) accountInput.value = accountNumber;
+      if (amount) amountInput.value = amount;
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const fromAccount = document.getElementById('fromBankAccount').value;
+      const amount = document.getElementById('amount').value;
+
+      try {
+         // Step 1: Transfer funds
+      const transferResponse = await fetch("http://localhost:8084/api/bank/transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fromAccount: fromAccount,
+          toAccount: TO_BANK_ACCOUNT,
+          amount: amount
+        })
+      });
+
+      if (!transferResponse.ok) {
+        const errorText = await transferResponse.text();
+        throw new Error("Transfer failed: " + errorText);
+      }
+
+        // Step 2: Pay EMI
+      let emiAccountNumber = localStorage.getItem("loanAccountNumber"); 
+
+        const emiRes = await fetch(`http://localhost:8081/api/emi/pay?accountNumber=${emiAccountNumber}&amount=${amount}`, {
+          method: 'POST'
+        });
+
+        const text = await emiRes.text();
+        resultMessage.textContent = text;
+
+        if (emiRes.ok) {
+          resultMessage.classList.add('text-green-600');
+          resultMessage.classList.remove('text-red-600');
+        } else {
+          resultMessage.classList.add('text-red-600');
+          resultMessage.classList.remove('text-green-600');
+        }
+      } catch (err) {
+        resultMessage.textContent = "❌ Something went wrong during the transfer or payment. Error : "+err;
+        resultMessage.classList.add('text-red-600');
+        resultMessage.classList.remove('text-green-600');
+      }
+    });
+  </script>
+</body>
+</html>

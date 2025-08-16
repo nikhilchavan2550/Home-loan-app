@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Prepayment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('./imgs/img.png'); /* Replace with correct path */
+      background-size: 400px;
+      background-repeat: repeat;
+      animation: pan 60s linear infinite;
+    }
+
+    @keyframes pan {
+      from { background-position: 0% 0%; }
+      to { background-position: 100% 100%; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 font-sans">
+  <div class="bg-white bg-opacity-90 rounded-xl shadow-lg p-8 max-w-lg w-full space-y-6">
+    <h2 class="text-2xl font-bold text-center">Loan Prepayment</h2>
+
+    <!-- Account Number (readonly) -->
+    <div>
+      <label for="accountNumber" class="block text-sm font-medium text-gray-700">Account Number</label>
+      <input
+        
+        id="accountNumber"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 bg-gray-100"
+        readonly
+      />
+    </div>
+
+    <!-- Prepayment Rules -->
+    <div class="bg-gray-100 rounded-lg p-4">
+      <h3 class="text-lg font-semibold mb-2">Prepayment Rules:</h3>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li>Allowed only after 6 EMIs are fully paid.</li>
+        <li>Minimum prepayment amount is ₹10,000 or at least 1 EMI.</li>
+        <li>Tenure is reduced after prepayment to save on interest.</li>
+        <li>You can also choose to foreclose the loan fully.</li>
+      </ul>
+    </div>
+   <div>
+  <label for="prepaymentAmount" class="block text-sm font-medium text-gray-700">Prepayment Amount</label>
+  <input
+    type="number"
+    id="prepaymentAmount"
+    class="mt-1 block w-full rounded-md border border-gray-300 p-2"
+    placeholder="Enter amount (min ₹10,000)"
+    min="10000"
+    required
+   />
+  </div>
+  <div class="mb-4">
+  <label for="bankAccount" class="block text-sm font-medium text-gray-700">Bank Account Number</label>
+  <input
+    type="text"
+    id="bankAccount"
+    placeholder="Enter your bank account number"
+    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+  />
+</div>
+    <!-- Submit Button -->
+   <div class="flex space-x-4 mt-4">
+  <button
+    onclick="submitPrepayment()"
+    class="w-1/2 bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition"
+  >
+    Submit Prepayment
+  </button>
+
+  <button
+    onclick="goBack()"
+    class="w-1/2 bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition"
+  >
+    Back
+  </button>
+</div>
+
+  </div>
+
+  <script>
+    // Extract account number from query string
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const accountNumber = urlParams.get('accountNumber');
+      if (accountNumber) {
+        document.getElementById("accountNumber").value = accountNumber;
+      }
+    }
+
+    function submitPrepayment() {
+  const accNo = document.getElementById("accountNumber").value;
+  const amount = parseFloat(document.getElementById("prepaymentAmount").value);
+
+  if (isNaN(amount) || amount < 10000) {
+    alert("Prepayment amount must be at least ₹10,000.");
+    return;
+  }
+
+  alert(`Prepayment of ₹${amount} submitted for Account Number: ${accNo}`);
+  // TODO: Replace with real API call
+}
+function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Income Details - LoanPro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="../css/income-details.css"  rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-card fade-in">
+            <div class="form-header">
+                <h1 class="form-title">
+                    <i class="bi bi-cash-stack me-2"></i>Income Details Management
+                </h1>
+                <p class="form-subtitle">Add new income details or manage existing records</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs" id="incomeDetailsTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">
+                        <i class="bi bi-plus-circle me-2"></i>Add New
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button" role="tab">
+                        <i class="bi bi-table me-2"></i>View/Edit Records
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="incomeDetailsTabContent">
+                <!-- Add New Tab -->
+                <div class="tab-pane fade show active" id="add" role="tabpanel">
+                    <form id="incomeForm">
+                        <div class="form-body">
+                            <!-- Alert Messages -->
+                            <div id="responseMessage" class="alert" style="display: none;" role="alert"></div>
+
+                            <!-- Employment Information Section -->
+                            <div class="form-section slide-in">
+                                <h3 class="section-title">
+                                    <i class="bi bi-briefcase"></i>Employment Information
+                                </h3>
+                                <div class="row g-3">
+        
+                                    <div class="col-md-6">
+                                        <label for="employmentType" class="form-label required-field">Employment Type</label>
+                                        <select id="employmentType" class="form-select" required>
+                                            <option value="">Select Employment Type</option>
+                                            <option value="SALARIED">Salaried</option>
+                                            <option value="SELF_EMPLOYED">Self Employed</option>
+                                            <option value="BUSINESS_OWNER">Business Owner</option>
+                                            <option value="FREELANCER">Freelancer</option>
+                                            <option value="RETIRED">Retired</option>
+                                        </select>
+                                        <div class="form-text">Select your employment type</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Organization Details Section -->
+                            <div class="form-section slide-in">
+                                <h3 class="section-title">
+                                    <i class="bi bi-building"></i>Organization Details
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="organizationType" class="form-label required-field">Organization Type</label>
+                                        <select id="organizationType" class="form-select" required>
+                                            <option value="">Select Organization Type</option>
+                                            <option value="PRIVATE">Private</option>
+                                            <option value="PUBLIC">Public</option>
+                                            <option value="GOVERNMENT">Government</option>
+                                            <option value="MNC">MNC</option>
+                                            <option value="STARTUP">Startup</option>
+                                        </select>
+                                        <div class="form-text">Select your organization type</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="employerName" class="form-label required-field">Employer Name</label>
+                                        <input type="text" class="form-control" id="employerName" required>
+                                        <div class="form-text">Enter your employer or company name</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Income Details Section -->
+                            <div class="form-section slide-in">
+                                <h3 class="section-title">
+                                    <i class="bi bi-currency-rupee"></i>Income Details
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="monthlyIncome" class="form-label required-field">Monthly Income (INR)</label>
+                                        <input type="number" class="form-control" id="monthlyIncome" min="0" step="0.01" required>
+                                        <div class="form-text">Enter your monthly income in INR</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="retirementAge" class="form-label required-field">Retirement Age</label>
+                                        <input type="number" class="form-control" id="retirementAge" min="18" max="70" required>
+                                        <div class="form-text">Enter your expected retirement age</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information Section -->
+                            <!-- <div class="form-section slide-in">
+                                <h3 class="section-title">
+                                    <i class="bi bi-calendar-event"></i>Additional Information
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="createdDate" class="form-label required-field">Created Date</label>
+                                        <input type="date" class="form-control" id="createdDate" required>
+                                        <div class="form-text">Select the creation date</div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <span id="submitText">Submit Income Details</span>
+                                <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- View/Edit Records Tab -->
+                <div class="tab-pane fade" id="view" role="tabpanel">
+                    <div class="form-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="section-title">
+                                <i class="bi bi-table"></i>Income Details Records
+                            </h3>
+                            <button class="btn btn-primary" onclick="loadIncomeDetails()">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                            </button>
+                        </div>
+                        
+                        <div id="recordsMessage" class="alert" style="display: none;" role="alert"></div>
+                        
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>ID</th>
+                                            <th>Personal ID</th> -->
+                                            <th>Employment Type</th>
+                                            <th>Organization</th>
+                                            <th>Employer</th>
+                                            <th>Monthly Income</th>
+                                            <th>Retirement Age</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="incomeDetailsTableBody">
+                                        <tr>
+                                            <td colspan="9" class="text-center text-muted py-4">
+                                                <i class="bi bi-inbox fs-1"></i>
+                                                <p class="mt-2">No records found. Click "Refresh" to load data.</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Income Details
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="editId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="editPersonalId" class="form-label required-field">Personal ID</label>
+                                <input type="number" class="form-control" id="editPersonalId" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editEmploymentType" class="form-label required-field">Employment Type</label>
+                                <select id="editEmploymentType" class="form-select" required>
+                                    <option value="">Select Employment Type</option>
+                                    <option value="SALARIED">Salaried</option>
+                                    <option value="SELF_EMPLOYED">Self Employed</option>
+                                    <option value="BUSINESS_OWNER">Business Owner</option>
+                                    <option value="FREELANCER">Freelancer</option>
+                                    <option value="RETIRED">Retired</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editOrganizationType" class="form-label required-field">Organization Type</label>
+                                <select id="editOrganizationType" class="form-select" required>
+                                    <option value="">Select Organization Type</option>
+                                    <option value="PRIVATE">Private</option>
+                                    <option value="PUBLIC">Public</option>
+                                    <option value="GOVERNMENT">Government</option>
+                                    <option value="MNC">MNC</option>
+                                    <option value="STARTUP">Startup</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editEmployerName" class="form-label required-field">Employer Name</label>
+                                <input type="text" class="form-control" id="editEmployerName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editMonthlyIncome" class="form-label required-field">Monthly Income (INR)</label>
+                                <input type="number" class="form-control" id="editMonthlyIncome" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editRetirementAge" class="form-label required-field">Retirement Age</label>
+                                <input type="number" class="form-control" id="editRetirementAge" min="18" max="70" required>
+                            </div>
+                            <div class="col-md-6" style="display:none;">
+                                <label for="editCreatedDate" class="form-label required-field">Created Date</label>
+                                <input type="date" class="form-control" id="editCreatedDate" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="updateIncomeDetails()">
+                        <i class="bi bi-check-lg me-2"></i>Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this income details record?</p>
+                    <p class="text-muted">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="bi bi-trash me-2"></i>Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/income-details.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

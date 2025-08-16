@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Orlo Home Loans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#DDDDDD',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter text-primary bg-white">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold text-primary">Orlo Home Loans</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-primary hover:text-gray-600 transition-colors duration-300">Home</a>
+                    <a href="index.html#services" class="text-primary hover:text-gray-600 transition-colors duration-300">Services</a>
+                    <a href="index.html#plans" class="text-primary hover:text-gray-600 transition-colors duration-300">Plans</a>
+                    <a href="index.html#testimonials" class="text-primary hover:text-gray-600 transition-colors duration-300">Testimonials</a>
+                    <a href="index.html#about" class="text-primary hover:text-gray-600 transition-colors duration-300">About Us</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="login.html" class="px-6 py-2 border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-lg">Login</a>
+                    <a href="register.html" class="px-6 py-2 bg-primary text-white hover:bg-gray-800 transition-all duration-300 rounded-lg">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex">
+        <!-- Left Side - Image -->
+        <div class="hidden lg:block lg:w-1/2 relative">
+            <div class="absolute inset-0 bg-cover bg-center grayscale" style="background-image: url('images - homeloan/sleek\ interior.avif');">
+                <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+            </div>
+            <div class="relative z-10 flex items-center justify-center h-full">
+                <div class="text-center text-white px-8">
+                    <h1 class="text-4xl font-bold mb-4">Join Orlo Home Loans</h1>
+                    <p class="text-xl">Start your journey towards owning your dream home today</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Registration Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
+            <div class="w-full max-w-md">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">Create Account</h2>
+                    <p class="text-gray-600">Join thousands of happy homeowners</p>
+                </div>
+
+
+
+                <form id="registerForm" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="firstName" class="block text-sm font-medium mb-2">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                   placeholder="First name">
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-sm font-medium mb-2">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                                   placeholder="Last name">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                               placeholder="Enter your email">
+                    </div>
+
+                    <div>
+                        <label for="pan" class="block text-sm font-medium mb-2">PAN Number</label>
+                        <input type="text" id="pan" name="pan" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                               placeholder="Enter your PAN number" maxlength="10">
+                        <p class="text-xs text-gray-500 mt-1">Enter 10-digit PAN number (e.g., ABCDE1234F)</p>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium mb-2">Password</label>
+                        <input type="password" id="password" name="password" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                               placeholder="Create a password">
+                        <p class="text-xs text-gray-500 mt-1">Must be at least 8 characters with uppercase, lowercase, digit, and special character</p>
+                    </div>
+
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                               placeholder="Confirm your password">
+                        <div id="passwordError" class="text-xs text-red-500 mt-1 hidden">Passwords do not match</div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" id="terms" name="terms" required 
+                               class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <label for="terms" class="ml-2 block text-sm text-gray-600">
+                            I agree to the 
+                            <a href="#" class="text-primary hover:text-gray-600 transition-colors duration-300">Terms of Service</a>
+                            and 
+                            <a href="#" class="text-primary hover:text-gray-600 transition-colors duration-300">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 font-semibold">
+                        Create Account
+                    </button>
+
+                <div id="successMsg" class="hidden text-green-600 text-sm mb-2"></div>
+                <div id="errorMsg" class="hidden text-red-600 text-sm mb-2"></div>
+
+                    <div id="spinner" class="mt-2 hidden flex justify-center">
+                    <svg class="animate-spin h-6 w-6 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"></path>
+                    </svg>
+                    </div>
+                </form>
+
+
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Google Sign-Up Button -->
+                <div id="google-signin-register" class="flex justify-center"></div>
+
+                <div class="mt-8 text-center">
+                    <p class="text-gray-600">
+                        Already have an account? 
+                        <a href="login.html" class="text-primary hover:text-gray-600 transition-colors duration-300 font-semibold">
+                            Sign in here
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Orlo Home Loans</h3>
+                    <p class="text-gray-300">Unlocking dreams, one home at a time.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="index.html#services" class="text-gray-300 hover:text-white transition-colors duration-300">Services</a></li>
+                        <li><a href="index.html#plans" class="text-gray-300 hover:text-white transition-colors duration-300">Plans</a></li>
+                        <li><a href="index.html#testimonials" class="text-gray-300 hover:text-white transition-colors duration-300">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">EMI Calculator</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Eligibility Check</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">Documentation Guide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">📧 info@orlo.com</li>
+                        <li class="text-gray-300">📞 +91 1800-123-4567</li>
+                        <li class="text-gray-300">📍 Pune, Maharashtra</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2025 Orlo Home Loans. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="google-auth.js"></script>
+</body>
+</html> 
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("registerForm");
+  const successMsg = document.getElementById("successMsg");
+  const errorMsg = document.getElementById("errorMsg");
+  const spinner = document.getElementById("spinner");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Clear old messages
+    successMsg.classList.add("hidden");
+    errorMsg.classList.add("hidden");
+    spinner.classList.add("hidden");
+
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const pan = document.getElementById("pan").value.trim().toUpperCase();
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    // Client-side validation
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !pan) {
+      errorMsg.textContent = "All fields are required.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      errorMsg.textContent = "Invalid email format.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+    if (!panRegex.test(pan)) {
+      errorMsg.textContent = "PAN must be in format: ABCDE1234F.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+    if (!passwordRegex.test(password)) {
+      errorMsg.textContent = "Password must have uppercase, lowercase, digit, special char & be 8+ chars long.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+    if (password !== confirmPassword) {
+      document.getElementById("passwordError").classList.remove("hidden");
+      return;
+    } else {
+      document.getElementById("passwordError").classList.add("hidden");
+    }
+
+    // Show spinner
+    spinner.classList.remove("hidden");
+
+    const payload = { firstName, lastName, email, password, pan };
+
+    try {
+      const res = await fetch("http://localhost:8085/applicant/customer/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = text;
+      }
+
+      if (res.ok) {
+        successMsg.textContent = typeof data === "string" ? data : "Registration successful!";
+        successMsg.classList.remove("hidden");
+        setTimeout(() => {
+          window.location.href = "../Cust_Login/customer_login.html";
+        }, 1500);
+      } else {
+        errorMsg.textContent = typeof data === "object" ? Object.values(data)[0] : (data || "Registration failed.");
+        errorMsg.classList.remove("hidden");
+      }
+    } catch (err) {
+      errorMsg.textContent = "Network error. Please try again.";
+      errorMsg.classList.remove("hidden");
+    } finally {
+      spinner.classList.add("hidden");
+    }
+  });
+});
+</script>

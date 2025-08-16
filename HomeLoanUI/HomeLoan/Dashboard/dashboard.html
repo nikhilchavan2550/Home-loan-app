@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orlo Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-[#e8f0e3] to-[#d8edea] text-[#2f2f2f] font-sans">
+
+  <div class="flex min-h-screen">
+
+    <div id="sidebar" class="bg-[#3a5a40] text-white w-64 transition-all duration-300 ease-in-out min-h-screen flex flex-col">
+      <div class="p-6 flex items-center justify-between">
+        <span class="text-2xl font-bold tracking-wide sidebar-label">Orlo Loans</span>
+        <button id="toggleSidebar" class="text-white hover:text-[#cad2c5] focus:outline-none">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <nav class="flex-1 space-y-2 px-4">
+        <a href="dashboard.html" class="flex items-center  bg-[#588157] gap-3 p-3 rounded-lg hover:bg-[#588157] transition">
+          <i data-lucide="home" class="w-5 h-5"></i>
+          <span class="sidebar-label">Dashboard</span>
+        </a>
+        <a href="status.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#588157] transition">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+          <span class="sidebar-label">Loan Tracker</span>
+        </a>
+        <a href="loan_account.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#588157] transition">
+          <i data-lucide="banknote" class="w-5 h-5"></i>
+          <span class="sidebar-label">Loan Accounts</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#588157] transition">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+          <span class="sidebar-label">Settings</span>
+        </a>
+      </nav>
+
+      <!-- Logout Button (top-right) -->
+<div class="absolute top-6 right-6 z-10">
+  <a href="#" id="logoutBtn" class="flex items-center gap-2 text-[#3a5a40] font-semibold hover:text-[#2f2f2f] transition">
+    <i data-lucide="log-out" class="w-5 h-5"></i>
+    <span class="hidden sm:inline">Logout</span>
+  </a>
+</div>
+
+
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-10">
+      <h1 class="text-3xl font-bold text-[#3a5a40] mb-6">Dashboard</h1>
+      <p class="text-md font-medium text-[#3a5a40] mb-6">
+  Customer ID: <span id="customerIdDisplay" class="font-bold"></span>
+</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+  //  Redirect if not logged in
+  const customerData = JSON.parse(localStorage.getItem("customerData"));
+  if (!customerData || !customerData.customerId) {
+    window.location.href = "../Cust_Login/customer_login.html";
+  } else {
+    // Display customer ID
+    document.getElementById("customerIdDisplay").textContent = customerData.customerId;
+  }
+
+  // Render Lucide icons
+  lucide.createIcons();
+
+  // Sidebar toggle
+  $("#toggleSidebar").on("click", function () {
+    $("#sidebar").toggleClass("w-64 w-20");
+    $(".sidebar-label").toggleClass("hidden");
+  });
+
+  // 🔓 Logout functionality
+  document.getElementById("logoutBtn").addEventListener("click", function (e) {
+    e.preventDefault();
+    localStorage.removeItem("customerData");
+    window.location.href = "../Cust_Login/customer_login.html";
+  });
+  </script>
+
+</body>
+</html>

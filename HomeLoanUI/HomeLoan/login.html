@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Orlo Home Loans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#DDDDDD',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-inter text-primary bg-white">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold text-primary">Orlo Home Loans</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html"
+                        class="text-primary hover:text-gray-600 transition-colors duration-300">Home</a>
+                    <a href="index.html#services"
+                        class="text-primary hover:text-gray-600 transition-colors duration-300">Services</a>
+                    <a href="index.html#plans"
+                        class="text-primary hover:text-gray-600 transition-colors duration-300">Plans</a>
+                    <a href="index.html#testimonials"
+                        class="text-primary hover:text-gray-600 transition-colors duration-300">Testimonials</a>
+                    <a href="index.html#about"
+                        class="text-primary hover:text-gray-600 transition-colors duration-300">About Us</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="login.html"
+                        class="px-6 py-2 border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-lg">Login</a>
+                    <a href="register.html"
+                        class="px-6 py-2 bg-primary text-white hover:bg-gray-800 transition-all duration-300 rounded-lg">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex">
+        <!-- Left Side - Image -->
+        <div class="hidden lg:block lg:w-1/2 relative">
+            <div class="absolute inset-0 bg-cover bg-center grayscale"
+                style="background-image: url('images - homeloan/indian\ home.avif');">
+                <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+            </div>
+            <div class="relative z-10 flex items-center justify-center h-full">
+                <div class="text-center text-white px-8">
+                    <h1 class="text-4xl font-bold mb-4">Welcome Back</h1>
+                    <p class="text-xl">Sign in to continue your journey towards your dream home</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
+            <div class="w-full max-w-md">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">Sign In</h2>
+                    <p class="text-gray-600">Access your Orlo Home Loans account</p>
+                </div>
+
+<form id="loginForm" method="post" class="space-y-6">
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                            placeholder="Enter your email">
+                        <p id="emailError" class="text-red-500 text-sm mt-1"></p>
+                    </div>
+
+                    <!-- Password Field with Toggle -->
+                    <div class="relative">
+                        <label for="password" class="block text-sm font-medium mb-2">Password</label>
+                        <input type="password" id="password" name="password" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 pr-12"
+                            placeholder="Enter your password">
+                        <p id="passwordError" class="text-red-500 text-sm mt-1"></p>
+
+                        <!-- Eye Icon -->
+                        <div id="togglePassword" class="absolute right-4 top-11 cursor-pointer" data-lucide="eye"></div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <p id="errorMsg" class="text-red-500 text-sm hidden"></p>
+
+                    <!-- Submit Button with Spinner -->
+                    <button type="submit" id="loginButton"
+                        class="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300 font-semibold flex items-center justify-center gap-2">
+                        Sign In
+                        <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                        </svg>
+                    </button>
+
+                </form>
+
+                <!-- Divider -->
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Google Sign-In Button -->
+                <div id="google-signin-login" class="flex justify-center"></div>
+
+                <div class="mt-8 text-center">
+                    <p class="text-gray-600">
+                        Don't have an account?
+                        <a href="register.html"
+                            class="text-primary hover:text-gray-600 transition-colors duration-300 font-semibold">
+                            Sign up here
+                        </a>
+                    </p>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <p class="text-gray-600">
+                        Are you an admin?
+                        <a href="admin_login.html"
+                            class="text-primary hover:text-gray-600 transition-colors duration-300 font-semibold">
+                            Admin login
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Orlo Home Loans</h3>
+                    <p class="text-gray-300">Unlocking dreams, one home at a time.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="index.html#services"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Services</a></li>
+                        <li><a href="index.html#plans"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Plans</a></li>
+                        <li><a href="index.html#testimonials"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Testimonials</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">EMI
+                                Calculator</a></li>
+                        <li><a href="#"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Eligibility
+                                Check</a></li>
+                        <li><a href="#"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Documentation
+                                Guide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">📧 info@orlo.com</li>
+                        <li class="text-gray-300">📞 +91 1800-123-4567</li>
+                        <li class="text-gray-300">📍 Pune, Maharashtra</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2025 Orlo Home Loans. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="google-auth.js"></script>
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const storedData = JSON.parse(localStorage.getItem("customerData"));
+    if (storedData && storedData.customerId) {
+        window.location.href = "./Loan_App/index.html";
+        return;
+    }
+
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const loginButton = document.getElementById("loginButton");
+    const errorMsg = document.getElementById("errorMsg");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+    const spinner = document.getElementById("spinner");
+
+    // ✅ Add success message element dynamically
+    const successMsg = document.createElement("p");
+    successMsg.className = "text-green-600 text-sm hidden mt-2";
+    form.appendChild(successMsg);
+
+    let showPassword = false;
+    togglePassword.addEventListener("click", () => {
+        showPassword = !showPassword;
+        passwordInput.type = showPassword ? "text" : "password";
+        togglePassword.setAttribute("data-lucide", showPassword ? "eye-off" : "eye");
+        lucide.createIcons();
+    });
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Reset UI states
+        errorMsg.classList.add("hidden");
+        successMsg.classList.add("hidden");
+        emailError.textContent = "";
+        passwordError.textContent = "";
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        let hasError = false;
+        if (!email) {
+            emailError.textContent = "Email is required.";
+            hasError = true;
+        } else if (!emailRegex.test(email)) {
+            emailError.textContent = "Invalid email format.";
+            hasError = true;
+        }
+        if (!password) {
+            passwordError.textContent = "Password is required.";
+            hasError = true;
+        }
+        if (hasError) return;
+
+        // Show spinner
+        loginButton.disabled = true;
+        spinner.classList.remove("hidden");
+
+        try {
+            const response = await fetch("http://localhost:8085/applicant/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const userData = await response.json();
+
+            if (response.ok && userData.message === "Login successful.") {
+                localStorage.setItem("customerData", JSON.stringify(userData));
+
+                successMsg.textContent = "✅ Login successful! Redirecting...";
+                successMsg.classList.remove("hidden");
+
+                setTimeout(() => {
+                    window.location.href = "./Loan_App/index.html";
+                }, 1200);
+            } else {
+                errorMsg.textContent = userData.message || "Invalid email or password.";
+                errorMsg.classList.remove("hidden");
+            }
+        } catch (error) {
+            errorMsg.textContent = "Network error. Please try again.";
+            errorMsg.classList.remove("hidden");
+        } finally {
+            spinner.classList.add("hidden");
+            loginButton.disabled = false;
+        }
+    });
+
+    lucide.createIcons();
+});
+</script>
+
+
+</body>
+
+<!-- Add inside <body> just before closing </body> tag -->
+
+
+</html>

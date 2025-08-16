@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Test - HomeSpire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#DDDDDD',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter text-primary bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Backend Connectivity Test</h1>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Test Customer API -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Customer API Test</h2>
+                <button id="testCustomers" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mb-4">
+                    Test Get All Customers
+                </button>
+                <div id="customerResult" class="bg-gray-100 p-4 rounded-lg text-sm font-mono h-32 overflow-y-auto">
+                    Click button to test...
+                </div>
+            </div>
+            
+            <!-- Test Admin Login -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Admin Login Test</h2>
+                <div class="space-y-3 mb-4">
+                    <input type="email" id="testAdminEmail" placeholder="admin@gmail.com" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg" value="admin@gmail.com">
+                    <input type="password" id="testAdminPassword" placeholder="Ganesh@123" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg" value="Ganesh@123">
+                </div>
+                <button id="testAdminLogin" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors duration-300 mb-4">
+                    Test Admin Login
+                </button>
+                <div id="adminResult" class="bg-gray-100 p-4 rounded-lg text-sm font-mono h-32 overflow-y-auto">
+                    Click button to test...
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Backend Status</h2>
+            <div id="backendStatus" class="text-lg">
+                <span class="text-yellow-600">Checking backend status...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test backend connectivity
+        async function testBackendStatus() {
+            const statusDiv = document.getElementById('backendStatus');
+            try {
+                const response = await fetch('http://localhost:8085/applicant/customer/all');
+                if (response.ok) {
+                    statusDiv.innerHTML = '<span class="text-green-600">✅ Backend is running and accessible!</span>';
+                } else {
+                    statusDiv.innerHTML = '<span class="text-red-600">❌ Backend responded with error: ' + response.status + '</span>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="text-red-600">❌ Backend is not accessible. Error: ' + error.message + '</span>';
+            }
+        }
+
+        // Test customer API
+        document.getElementById('testCustomers').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('customerResult');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch('http://localhost:8085/applicant/customer/all');
+                const customers = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.textContent = `✅ Success! Found ${customers.length} customers:\n\n` + 
+                        JSON.stringify(customers, null, 2);
+                } else {
+                    resultDiv.textContent = `❌ Error: ${response.status} - ${customers.message || 'Unknown error'}`;
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Network Error: ${error.message}`;
+            }
+        });
+
+        // Test admin login
+        document.getElementById('testAdminLogin').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('adminResult');
+            const email = document.getElementById('testAdminEmail').value;
+            const password = document.getElementById('testAdminPassword').value;
+            
+            resultDiv.textContent = 'Testing admin login...';
+            
+            try {
+                const response = await fetch('http://localhost:8085/applicant/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.message.includes('successful')) {
+                    resultDiv.textContent = `✅ Admin Login Successful!\n\nAdmin Details:\n` + 
+                        JSON.stringify(result, null, 2);
+                } else {
+                    resultDiv.textContent = `❌ Admin Login Failed: ${result.message || 'Unknown error'}`;
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Network Error: ${error.message}`;
+            }
+        });
+
+        // Check backend status on page load
+        testBackendStatus();
+    </script>
+</body>
+</html> 

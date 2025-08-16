@@ -1,0 +1,118 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Layout Structure */
+body {
+    display: flex;
+    height: 100vh;
+    background: #f4f6f9;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background-color: #1a1a2e;
+    color: #fff;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.sidebar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #00adb5;
+    animation: slideIn 1s ease-in-out;
+}
+
+.nav-links {
+    list-style: none;
+}
+
+.nav-links li {
+    margin: 20px 0;
+}
+
+.nav-links a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px;
+    display: block;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.nav-links a:hover {
+    background-color: #00adb5;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.nav-links a.logout {
+    color: #ff4b5c;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 230px;
+    padding: 20px;
+    width: calc(100% - 230px);
+    overflow-y: auto;
+    height: 100vh;
+}
+
+/* Topbar */
+.topbar {
+    background-color: #fff;
+    padding: 15px 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+.topbar h1 {
+    font-size: 22px;
+    color: #1a1a2e;
+}
+
+.topbar p {
+    color: #555;
+    font-size: 14px;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+}

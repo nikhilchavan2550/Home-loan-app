@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Format Test - HomeSpire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-primary mb-8 text-center">Text Formatting Test</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Raw Text -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">Raw Text (Before Formatting)</h2>
+                    <div class="bg-gray-100 p-4 rounded-lg text-sm">
+                        <p>The Equated Monthly Installment (EMI) for a home loan is typically calculated using the following formula:</p>
+                        <p><strong>EMI = [P x R x (1+R)^N] / [(1+R)^N-1]</strong></p>
+                        <p>Where:</p>
+                        <ul>
+                            <li><strong>P</strong> = Principal Loan Amount</li>
+                            <li><strong>R</strong> = Interest Rate per month (Annual interest rate divided by 12)</li>
+                            <li><strong>N</strong> = Loan tenure in months</li>
+                        </ul>
+                        <p>Essentially, this formula calculates the fixed monthly payment needed to repay both the principal amount of your home loan and the accrued interest over the specified loan term. Many online home loan EMI calculators are available to easily compute this. You simply input the loan amount, interest rate, and loan tenure to get your estimated EMI.</p>
+                    </div>
+                </div>
+                
+                <!-- Formatted Text -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">Formatted Text (After Processing)</h2>
+                    <div class="bg-gray-100 p-4 rounded-lg text-sm" id="formattedOutput">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Test Different Formats</h2>
+                <div class="space-y-4">
+                    <button onclick="testFormat('bold')" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-300">
+                        Test Bold Formatting
+                    </button>
+                    <button onclick="testFormat('list')" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-300">
+                        Test List Formatting
+                    </button>
+                    <button onclick="testFormat('formula')" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-300">
+                        Test Formula Formatting
+                    </button>
+                    <button onclick="testFormat('emi')" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-300">
+                        Test EMI Response
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to format AI response text (same as in assistant.js)
+        function formatResponseText(text) {
+            // Replace **text** with <strong>text</strong> for bold
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Replace *text* with <em>text</em> for italic
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Replace bullet points with proper HTML lists
+            text = text.replace(/^\s*•\s*(.*)$/gm, '<li>$1</li>');
+            text = text.replace(/^\s*-\s*(.*)$/gm, '<li>$1</li>');
+            
+            // Replace numbered lists
+            text = text.replace(/^\s*(\d+)\.\s*(.*)$/gm, '<li>$2</li>');
+            
+            // Wrap lists in <ul> tags
+            text = text.replace(/(<li>.*<\/li>)/gs, '<ul class="list-disc list-inside space-y-1 my-2">$1</ul>');
+            
+            // Replace line breaks with <br> tags
+            text = text.replace(/\n/g, '<br>');
+            
+            // Add spacing around formulas
+            text = text.replace(/(EMI\s*=\s*\[.*?\])/g, '<div class="bg-gray-200 p-3 rounded-lg my-3 font-mono text-sm">$1</div>');
+            
+            // Add spacing around Where: sections
+            text = text.replace(/(Where:)/g, '<div class="mt-3 mb-2"><strong>$1</strong></div>');
+            
+            // Add spacing around variable definitions
+            text = text.replace(/(\*\*[^*]+\*\*\s*=\s*[^*]+)/g, '<div class="ml-4 mb-1">$1</div>');
+            
+            return text;
+        }
+
+        function testFormat(type) {
+            const outputDiv = document.getElementById('formattedOutput');
+            let testText = '';
+
+            switch(type) {
+                case 'bold':
+                    testText = 'This is a **bold text** example and this is **another bold** text.';
+                    break;
+                case 'list':
+                    testText = 'Here are some important points:\n• First point\n• Second point\n• Third point';
+                    break;
+                case 'formula':
+                    testText = 'The formula is: **EMI = [P x R x (1+R)^N] / [(1+R)^N-1]**\nWhere:\n**P** = Principal amount\n**R** = Rate per month\n**N** = Number of months';
+                    break;
+                case 'emi':
+                    testText = 'The Equated Monthly Installment (EMI) for a home loan is typically calculated using the following formula:\n\n**EMI = [P x R x (1+R)^N] / [(1+R)^N-1]**\n\nWhere:\n• **P** = Principal Loan Amount\n• **R** = Interest Rate per month (Annual interest rate divided by 12)\n• **N** = Loan tenure in months\n\nEssentially, this formula calculates the fixed monthly payment needed to repay both the principal amount of your home loan and the accrued interest over the specified loan term.';
+                    break;
+            }
+
+            const formattedText = formatResponseText(testText);
+            outputDiv.innerHTML = formattedText;
+        }
+
+        // Initialize with EMI example
+        testFormat('emi');
+    </script>
+</body>
+</html> 

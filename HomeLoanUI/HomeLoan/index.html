@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orlo Home Loans - Unlock the Door to Your Dream Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#DDDDDD',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-inter text-primary bg-white">
+    <!-- Header -->
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            /* equivalent to Tailwind's px-8 py-4 */
+            font-size: 1.125rem;
+            /* Tailwind's text-lg */
+            font-weight: 600;
+            /* Tailwind's font-semibold */
+            background-color: black;
+            border-radius: 0.5rem;
+            /* Tailwind's rounded-lg */
+            transition: all 0.3s ease;
+            text-decoration: none;
+            /* Remove underline */
+        }
+
+        .btn:hover {
+            background-color: #745b47;
+            color: #ffffff;
+        }
+    </style>
+
+   <header id="header"
+    class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-80 backdrop-blur transition-all duration-300">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <!-- Logo -->
+            <div class="text-2xl font-bold text-black transition-colors duration-300" id="logo">
+                Orlo Home Loans
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-gray-200 hover:text-[#D6C0B3] transition-colors duration-300">Home</a>
+                <a href="#services" class="text-gray-200 hover:text-[#D6C0B3] transition-colors duration-300">Services</a>
+                <a href="#plans" class="text-gray-200 hover:text-[#D6C0B3] transition-colors duration-300">Plans</a>
+                <a href="#about" class="text-gray-200 hover:text-[#D6C0B3] transition-colors duration-300">About Us</a>
+                <a href="assistant.html" class="text-gray-200 hover:text-[#D6C0B3] transition-colors duration-300">Assistant</a>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="flex items-center space-x-4">
+                <a href="login.html"
+                    class="px-6 py-2 border-2 border-[#D6C0B3] text-[#D6C0B3] hover:bg-[#D6C0B3] hover:text-black transition-all duration-300 rounded-lg">Login</a>
+                <a href="register.html"
+                    class="px-6 py-2 border-2 border-[#D6C0B3] bg-[#D6C0B3] text-black hover:bg-[#cbb3a5] transition-all duration-300 rounded-lg">Register</a>
+                <a href="admin_login.html"
+                    class="px-6 py-2 border-2 border-[#D6C0B3] text-[#D6C0B3] hover:bg-[#D6C0B3] hover:text-black transition-all duration-300 rounded-lg text-sm">Admin</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+        style="background-image: url('images - homeloan/home1.avif');">
+        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+        <div class="relative z-10 text-center text-gray-100 px-6">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp text-white">
+                Unlock the Door to Your <span style="color: #D6C0B3;">Dream Home</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto animate-fadeInUp text-gray-300">
+                Experience seamless home financing with competitive rates and personalized solutions tailored to your
+                needs.
+            </p>
+            <a href="#services" class="btn">
+                Get Started
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 animate-fadeInUp">
+                <h2 class="text-4xl font-bold mb-4">Services 🛠️</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Comprehensive home loan solutions designed to make
+                    your dream home a reality</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-fadeInUp">
+                    <div class="h-64 bg-cover bg-center"
+                        style="background-image: url('images - homeloan/family - toys.avif');"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3">Home Purchase Loans</h3>
+                        <p class="text-gray-600">Secure financing for your dream home with competitive interest rates
+                            and flexible repayment options.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-fadeInUp">
+                    <div class="h-64 bg-cover bg-center"
+                        style="background-image: url('images - homeloan/Loan_application.avif');"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3">Effortless Digital Application</h3>
+                        <p class="text-gray-600">Say goodbye to endless paperwork and branch visits. Our intuitive app
+                            guides you through a seamless online application process, allowing you to submit all
+                            necessary documents securely from the comfort of your home. Experience a truly paperless and
+                            swift start to your home loan journey.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-fadeInUp">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('images - homeloan/emi.avif');">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3">EMI Management Tools</h3>
+                        <p class="text-gray-600">Take control of your finances with our intuitive tools designed to help
+                            you manage your EMIs effortlessly. Stay informed with clear payment schedules, payment
+                            history, and future projections, all in an easy-to-understand format.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Tools Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 animate-fadeInUp">
+                <h2 class="text-4xl font-bold mb-4">Financial Tools 🧮</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Plan your home purchase with our comprehensive
+                    financial calculators</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex border-b mb-8">
+                        <button class="tab-btn active px-6 py-3 text-lg font-semibold border-b-2 border-primary"
+                            data-tab="emi">EMI Calculator</button>
+                        <button class="tab-btn px-6 py-3 text-lg font-semibold text-gray-500"
+                            data-tab="eligibility">Eligibility Calculator</button>
+                    </div>
+
+                    <!-- EMI Calculator -->
+                    <div id="emi-calculator" class="tab-content">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Loan Amount (₹)</label>
+                                    <input type="number" id="loan-amount"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        placeholder="5000000">
+                                </div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Interest Rate (%)</label>
+                                    <input type="number" id="interest-rate"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        placeholder="8.5" step="0.1">
+                                </div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Loan Tenure (Years)</label>
+                                    <input type="number" id="loan-tenure"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        placeholder="20">
+                                </div>
+                                <button id="calculate-emi"
+                                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300">Calculate
+                                    EMI</button>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-4">EMI Breakdown</h3>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between">
+                                        <span>Monthly EMI:</span>
+                                        <span id="monthly-emi" class="font-bold">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Total Interest:</span>
+                                        <span id="total-interest" class="font-bold">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Total Amount:</span>
+                                        <span id="total-amount" class="font-bold">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eligibility Calculator -->
+                    <div id="eligibility-calculator" class="tab-content hidden">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Monthly Income (₹)</label>
+                                    <input type="number" id="monthly-income"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        placeholder="75000">
+                                </div>
+                                <!-- <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Monthly Expenses (₹)</label>
+                                    <input type="number" id="monthly-expenses" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="25000">
+                                </div> -->
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Existing EMIs (₹)</label>
+                                    <input type="number" id="existing-emis"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        placeholder="0">
+                                </div>
+                                <button id="calculate-eligibility"
+                                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300">Calculate
+                                    Eligibility</button>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-4">Eligibility Results</h3>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between">
+                                        <span>Maximum Loan Amount:</span>
+                                        <span id="max-loan-amount" class="font-bold">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>EMI Capacity:</span>
+                                        <span id="emi-capacity" class="font-bold">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Eligibility Score:</span>
+                                        <span id="eligibility-score" class="font-bold">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section id="plans" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 animate-fadeInUp">
+                <h2 class="text-4xl font-bold mb-4">Plans 📈</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Choose the perfect home loan plan that fits your
+                    financial goals</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8 border-2 border-gray-200 animate-fadeInUp">
+                    <h3 class="text-2xl font-bold mb-4">Basic</h3>
+                    <div class="text-4xl font-bold mb-6">8.5%</div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><span class="mr-2">✓</span> Standard processing</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> Basic documentation</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> 15-day approval</li>
+                    </ul>
+                    <button
+                        class="w-full bg-gray-200 text-primary py-3 rounded-lg hover:bg-gray-300 transition-colors duration-300">Choose
+                        Basic</button>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-8 border-2 border-primary relative animate-fadeInUp">
+                    <div
+                        class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold">
+                        Most Popular</div>
+                    <h3 class="text-2xl font-bold mb-4">Premium</h3>
+                    <div class="text-4xl font-bold mb-6">8.0%</div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><span class="mr-2">✓</span> Priority processing</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> Reduced documentation</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> 7-day approval</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> Dedicated relationship manager</li>
+                    </ul>
+                    <button
+                        class="w-full bg-primary text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-300">Choose
+                        Premium</button>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-8 border-2 border-gray-200 animate-fadeInUp">
+                    <h3 class="text-2xl font-bold mb-4">Elite</h3>
+                    <div class="text-4xl font-bold mb-6">7.5%</div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><span class="mr-2">✓</span> Express processing</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> Minimal documentation</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> 3-day approval</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> Personal concierge service</li>
+                        <li class="flex items-center"><span class="mr-2">✓</span> Flexible repayment options</li>
+                    </ul>
+                    <button
+                        class="w-full bg-gray-200 text-primary py-3 rounded-lg hover:bg-gray-300 transition-colors duration-300">Choose
+                        Elite</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 animate-fadeInUp">
+                <h2 class="text-4xl font-bold mb-4">Testimonials ⭐</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Hear from our satisfied customers about their Orlo
+                    Home Loans experience</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="relative">
+                    <div id="testimonial-slider" class="overflow-hidden">
+                        <div class="testimonial-slide active">
+                            <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+                                <div
+                                    class="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center overflow-hidden">
+                                    <img src="images - homeloan/rajesh.avif" alt="Rajesh & Priya Sharma"
+                                        class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-lg text-gray-600 mb-6">"Orlo Home Loans made our dream of owning a home a
+                                    reality. The process was smooth, transparent, and the team was incredibly supportive
+                                    throughout."</p>
+                                <h4 class="font-bold text-lg">Rajesh Sharma</h4>
+                                <p class="text-gray-500">Mumbai, Maharashtra</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-slide hidden">
+                            <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+                                <div
+                                    class="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center overflow-hidden">
+                                    <img src="images - homeloan/amit patel.avif" alt="Amit Patel"
+                                        class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-lg text-gray-600 mb-6">"The EMI calculator helped me plan my finances
+                                    perfectly. Orlo Home Loans's competitive rates and excellent service exceeded my
+                                    expectations."</p>
+                                <h4 class="font-bold text-lg">Amit Patel</h4>
+                                <p class="text-gray-500">Bangalore, Karnataka</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-slide hidden">
+                            <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+                                <div
+                                    class="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6 flex items-center justify-center overflow-hidden">
+                                    <img src="images - homeloan/Meera reddy.avif" alt="Meera Reddy"
+                                        class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-lg text-gray-600 mb-6">"As a first-time homebuyer, I was nervous about
+                                    the process. Orlo Home Loans guided me through every step with patience and
+                                    professionalism."</p>
+                                <h4 class="font-bold text-lg">Meera Reddy</h4>
+                                <p class="text-gray-500">Hyderabad, Telangana</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-8 space-x-2">
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-primary" data-slide="0"></button>
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="1"></button>
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="2"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="about" class="bg-primary text-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Orlo Home Loans</h3>
+                    <p class="text-gray-300">Unlocking dreams, one home at a time.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="#services"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Services</a></li>
+                        <li><a href="#plans"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Plans</a></li>
+                        <li><a href="#testimonials"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Testimonials</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">EMI
+                                Calculator</a></li>
+                        <li><a href="#"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Eligibility
+                                Check</a></li>
+                        <li><a href="#"
+                                class="text-gray-300 hover:text-white transition-colors duration-300">Documentation
+                                Guide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-300">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">📧 info@orlo.com</li>
+                        <li class="text-gray-300">📞 +91 1800-123-4567</li>
+                        <li class="text-gray-300">📍 Pune, Maharashtra</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2025 Orlo Home Loans. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

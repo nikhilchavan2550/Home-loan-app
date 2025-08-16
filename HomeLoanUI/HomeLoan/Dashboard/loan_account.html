@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loan Account | Orlo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body class="text-[#2f2f2f] font-sans min-h-screen overflow-y-auto">
+  <div class="flex min-h-screen relative">
+    <!-- Main Content -->
+    <main class="flex-1 p-10 overflow-y-auto max-h-screen">
+      <header class="flex justify-between items-center mb-12">
+        <!-- Optional Header -->
+      </header>
+
+      <section class="bg-white rounded-3xl shadow-2xl border border-[#cad2c5] p-10 max-w-4xl mx-auto text-[#2f2f2f]">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-center">Loan Account Details</h2>
+
+        <div id="loanContainer" class="text-center">
+          <div id="loanCard" class="hidden bg-[#f5fdfb] border border-[#a3b18a] rounded-2xl p-6 shadow-md hover:shadow-[0_4px_20px_rgba(52,107,91,0.3)] transition-shadow duration-300 text-left space-y-4 max-w-xl mx-auto">
+            <p class="text-lg"><span class="font-semibold">Loan Account #:</span> <span id="accountNumber" class="text-blue-700 font-bold"></span></p>
+            <p><span class="font-semibold">Disbursement Date:</span> <span id="disbursementDate"></span></p>
+            <p><span class="font-semibold">Principal Amount:</span> ₹<span id="principalAmount" class="text-green-700 font-semibold"></span></p>
+            <p><span class="font-semibold">Interest Rate:</span> <span id="interestRate" class="text-yellow-700"></span>%</p>
+            <p><span class="font-semibold">EMI Amount:</span> ₹<span id="emiAmount" class="text-purple-700 font-semibold"></span></p>
+          <a href="../Emi_Schedule/emi_portal.html" class="group relative flex w-full items-center justify-center overflow-hidden rounded-2xl border border-green-600 bg-green-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:bg-white hover:text-green-600">
+            <span class="absolute inset-0 h-full w-full scale-0 bg-white transition-all duration-300 ease-out group-hover:scale-100 group-hover:opacity-10"></span>
+            <span class="relative z-10 flex items-center gap-2">
+              <i class="bi bi-currency-rupee"></i> Check EMI
+            </span>
+          </a>  
+
+          </div>
+        </div>
+
+
+
+        <div id="error" class="text-red-500 text-center hidden mt-6 font-semibold"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    $(document).ready(async function () {
+      lucide.createIcons();
+
+      // ✅ Validate and load customerData
+      const customerData = JSON.parse(localStorage.getItem("customerData"));
+
+      if (!customerData || !customerData.customerId) {
+        window.location.href = "../Cust_Login/customer_login.html";
+        return;
+      }
+
+      const customerId = customerData.customerId;
+
+      try {
+        // ✅ Step 1: Get all loan applications for the customer
+        const loanResponse = await fetch(`http://localhost:8080/api/loan/by-customer/${customerId}`);
+        const loanApplications = await loanResponse.json();
+
+        if (!loanApplications || !loanApplications.length) {
+          $("#error").removeClass("hidden").text("No loan applications found.");
+          return;
+        }
+
+        // ✅ Step 2: Use the first loan application to fetch loan account
+        const application = loanApplications[0];
+        const applicationId = application.id;
+
+        $.ajax({
+          url: `http://localhost:8082/api/loan-accounts/application/${applicationId}`,
+          method: "GET",
+          dataType: "json",
+          success: function (data) {
+            if (!data || !data.accountNumber) {
+              $("#error").removeClass("hidden").text("⚠️ No loan account found for this application.");
+              return;
+            }
+
+              localStorage.setItem("loanAccountNumber", data.accountNumber);
+
+
+            // ✅ Populate loan card
+            $("#accountNumber").text(data.accountNumber);
+            $("#disbursementDate").text(formatDate(data.disbursementDate));
+            $("#principalAmount").text(data.principalAmount.toLocaleString());
+            $("#interestRate").text(data.interestRate);
+            $("#emiAmount").text(data.emiAmount.toLocaleString());
+            $("#loanCard").removeClass("hidden");
+          },
+          error: function (xhr) {
+            $("#error").removeClass("hidden").text(
+              // `⚠️ Error: ${xhr.status} ${xhr.statusText} – ${xhr.responseText || "No response"}`
+              `⚠️ Loan Account Not Created`
+            );
+          }
+        });
+      } catch (error) {
+        $("#error").removeClass("hidden").text(`❌ ${error.message}`);
+        console.error("Error loading loan data:", error);
+      }
+
+      // ✅ Format date for display
+      function formatDate(dateStr) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        const dateObj = new Date(dateStr);
+        return isNaN(dateObj) ? dateStr : dateObj.toLocaleDateString("en-IN", options);
+      }
+
+      // ✅ Logout Button (optional)
+      $("#logoutBtn").on("click", function (e) {
+        e.preventDefault();
+        localStorage.removeItem("customerData");
+        window.location.href = "../Cust_Login/customer_login.html";
+      });
+    });
+  </script>
+</body>
+</html>

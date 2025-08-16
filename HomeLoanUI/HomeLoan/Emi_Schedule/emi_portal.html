@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EMI Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+ <style>
+  body {
+    background-image: url('./imgs/image.png'); /* Use local image */
+    background-size: 400px;
+    background-repeat: repeat;
+    animation: pan 60s linear infinite;
+  }
+
+  @keyframes pan {
+    from { background-position: 0 0; }
+    to { background-position: 1000px 1000px; }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .transition-button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .transition-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+</style>
+
+</head>
+<body class="min-h-screen p-6">
+  <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl p-6 space-y-6 fade-in">
+
+    <h1 class="text-3xl font-bold text-center text-green-700">EMI Dashboard</h1>
+
+    <!-- Account Number Input -->
+    <!-- <div class="flex items-center justify-center space-x-4">
+      <input id="accountInput" placeholder="Enter Account Number"
+        class="border border-green-300 focus:ring-green-500 p-2 rounded w-64 shadow-sm focus:outline-none" />
+      <button onclick="loadDashboard()"
+        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-button">Load</button>
+    </div> -->
+
+    <div id="actionButtons" class="flex justify-center space-x-6 mt-4 fade-in">
+  <button onclick="initiatePrepayment()"
+    class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded transition-button">Prepayment</button>
+  <button onclick="initiateForeclosure(accountNumber)"
+  class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded transition-button">
+  Foreclosure
+</button>
+
+<button onclick="downloadPDF()"
+  class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded transition-button">
+  Print Schedule
+</button>
+
+</div>
+
+    
+    <!-- Summary Section -->
+    <div id="summary" class="bg-green-100 rounded p-4 text-green-900 font-semibold hidden"></div>
+
+    <!-- Tabs -->
+    <div class="flex space-x-4 border-b mt-4">
+      <button onclick="switchTab('all')" id="tab-all"
+        class="py-2 px-4 font-medium text-gray-600 border-b-2 border-transparent hover:text-green-700 transition-all">All</button>
+      <button onclick="switchTab('paid')" id="tab-paid"
+        class="py-2 px-4 font-medium text-gray-600 border-b-2 border-transparent hover:text-green-700 transition-all">Paid</button>
+      <button onclick="switchTab('unpaid')" id="tab-unpaid"
+        class="py-2 px-4 font-medium text-gray-600 border-b-2 border-transparent hover:text-green-700 transition-all">Unpaid</button>
+    </div>
+
+
+
+    <!-- EMI Table -->
+    <div id="emiTable" class="overflow-x-auto mt-4 fade-in"></div>
+
+    
+
+  </div>
+
+  <script>
+    let currentTab = 'all';
+
+    let accountNumber = localStorage.getItem("loanAccountNumber"); 
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!accountNumber) {
+        alert("No loan account number found. Please apply for a loan first.");
+        return;
+      }
+
+      fetchSummary();
+      fetchEmiData();
+    });
+
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('[id^=tab-]').forEach(btn => btn.classList.remove('border-green-700', 'text-green-700'));
+      document.getElementById(`tab-${tab}`).classList.add('border-green-700', 'text-green-700');
+      fetchEmiData();
+    }
+
+    function loadDashboard() {
+      const input = document.getElementById("accountInput").value;
+      if (!input) return alert("Please enter account number");
+      accountNumber = input;
+      fetchSummary();
+      fetchEmiData();
+    }
+
+    function fetchSummary() {
+  fetch(`http://localhost:8081/api/emi/summary/${accountNumber}`)
+    .then(res => res.json()) // ✅ Parse JSON directly
+    .then(data => {
+      const summaryBox = document.getElementById("summary");
+
+      // Format currency in Indian format
+      const totalPaidFormatted = `₹${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(data.totalPaid)}`;
+      const totalRemainingFormatted = `₹${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(data.totalRemaining)}`;
+
+      // Build a clean HTML output
+      summaryBox.innerHTML = `
+        <p><strong>Account:</strong> ${data.accountNumber}</p>
+        <p><strong>Total Paid:</strong> ${totalPaidFormatted}</p>
+        <p><strong>Remaining Amount:</strong> ${totalRemainingFormatted}</p>
+      `;
+
+      summaryBox.classList.remove("hidden");
+      summaryBox.classList.add("fade-in");
+    })
+    .catch(err => {
+      console.error("Error fetching summary:", err);
+    });
+}
+
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF("p", "pt", "a4");
+
+  // Title
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(20);
+  doc.text("EMI Schedule", 40, 40);
+
+  // Account number
+  doc.setFontSize(12);
+  doc.setFont("Helvetica", "normal");
+  doc.text(`Account Number: ${accountNumber}`, 40, 70);
+
+  // Summary text with better spacing
+  const summaryText = document.getElementById("summary").innerText;
+  doc.setFontSize(12);
+  doc.setFont("Helvetica", "bold");
+  doc.text("Summary:", 40, 100);
+  doc.setFont("Helvetica", "normal");
+
+  // Wrap summary text to avoid overflow
+  const splitSummary = doc.splitTextToSize(summaryText, 500);
+  doc.text(splitSummary, 40, 120);
+  
+  // Move Y position after summary
+  let yPos = 120 + splitSummary.length * 16; // 16px per line for good spacing
+
+  // Table content
+  yPos += 20;
+  doc.setFont("Helvetica", "bold");
+  doc.text("Month", 40, yPos);
+  doc.text("EMI Amount", 120, yPos);
+  doc.text("Due Date", 240, yPos);
+  doc.text("Status", 360, yPos);
+
+  // Table rows with increased height
+  const emiRows = document.querySelectorAll("#emiTable table tbody tr");
+  doc.setFont("Helvetica", "normal");
+  yPos += 25; // More space before first row
+  emiRows.forEach(row => {
+    const cols = row.querySelectorAll("td");
+    doc.text(cols[0].innerText, 40, yPos);
+    doc.text(cols[1].innerText, 120, yPos);
+    doc.text(cols[2].innerText, 240, yPos);
+    doc.text(cols[3].innerText, 360, yPos);
+    yPos += 25; // Increase row height
+  });
+
+  doc.save(`EMI_Schedule_${accountNumber}.pdf`);
+}
+
+
+
+    function fetchEmiData() {
+      let url = `http://localhost:8081/api/emi/${accountNumber}`;
+      if (currentTab === 'paid') url = `http://localhost:8081/api/emi/paid/${accountNumber}`;
+      else if (currentTab === 'unpaid') url = `http://localhost:8081/api/emi/unpaid/${accountNumber}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => renderEmiTable(data));
+    }
+
+     function initiatePrepayment() 
+   {
+  if (!accountNumber) {
+    alert("Please load an account first.");
+    return;
+  }
+  // Pass the account number to prepayment.html via query params
+  window.location.href = `prepayment.html?accountNumber=${accountNumber}`;
+  }
+
+   function initiateForeclosure(accountNumber) {
+  // Encode both values into the URL query parameters
+  window.location.href = `foreclosure.html?accountNumber=${accountNumber}`;
+
+   }
+
+    function isCurrentMonth(dueDate, createdDate) {
+      const today = new Date();
+      const due = new Date(dueDate);
+      const created = new Date(createdDate);
+
+      const isAfterCreation = today >= created && today.getDate() >= created.getDate();
+      const isDueNextMonth =
+        due.getFullYear() === today.getFullYear() &&
+        due.getMonth() === today.getMonth() + 1;
+
+      return isAfterCreation && isDueNextMonth;
+    }
+
+    function renderEmiTable(data) {
+  
+      if (!Array.isArray(data)) {
+    document.getElementById("emiTable").innerHTML = "<p class='text-red-500'>Invalid EMI data.</p>";
+    return;
+  }
+
+  // ✅ Sort by dueDate (ascending)
+  data.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  let html = `<table class="w-full text-sm text-left border border-gray-300">
+    <thead class="bg-green-100 text-green-900">
+      <tr>
+        <th class="px-4 py-2">Month</th>
+        <th class="px-4 py-2">EMI Amount</th>
+        <th class="px-4 py-2">Due Date</th>
+        <th class="px-4 py-2">Status</th>
+        <th class="px-4 py-2">Action</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white">`;
+
+  data.forEach(emi => {
+    const dueDateStr = emi.dueDate;
+    const createdDateStr = emi.createdDate;
+    const isPaid = emi.paidFlag;
+    const allowPay = isCurrentMonth(dueDateStr, createdDateStr) && !isPaid;
+
+    html += `<tr class="border-t transition hover:bg-green-50">
+      <td class="px-4 py-2">${emi.monthNumber}</td>
+      <td class="px-4 py-2">₹${emi.emiAmount}</td>
+      <td class="px-4 py-2">${new Date(dueDateStr).toDateString()}</td>
+      <td class="px-4 py-2">${isPaid ? "Paid" : "Unpaid"}</td>
+      <td class="px-4 py-2">`;
+
+    if (allowPay) {
+      html += `<button onclick="redirectToBank(${emi.scheduleId}, ${emi.emiAmount})"
+        class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded transition-button">Pay Now</button>`;
+    } else {
+      html += `<span class="text-gray-400">-</span>`;
+    }
+
+    html += `</td></tr>`;
+  });
+
+  html += `</tbody></table>`;
+  document.getElementById("emiTable").innerHTML = html;
+}
+
+
+    function redirectToBank(scheduleId, amount) {
+      const bankUrl = `bank.html?scheduleId=${scheduleId}&amount=${amount}&accountNumber=${accountNumber}`;
+      window.location.href = bankUrl;
+    }
+  </script>
+</body>
+</html>

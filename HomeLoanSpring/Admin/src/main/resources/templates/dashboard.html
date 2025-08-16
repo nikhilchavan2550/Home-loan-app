@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LoanPro Admin Panel</title>
+
+    <!-- CSS File -->
+    <link rel="stylesheet" th:href="@{static/css/style.css}">
+
+    <!-- JS File -->
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">LoanPro</div>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}" class="nav-item">Dashboard</a></li>
+            <li><a th:href="@{/personal-details}" class="nav-item">Personal Details</a></li>
+            <li><a th:href="@{/income-details}" class="nav-item">Income Details</a></li>
+            <li><a th:href="@{/property-details}" class="nav-item">Property Details</a></li>
+            <li><a th:href="@{/documents}" class="nav-item">Documents</a></li>
+            <li><a th:href="@{/loan-application}" class="nav-item">Loan Applications</a></li>
+            <li><a th:href="@{/settings}" class="nav-item">Settings</a></li>
+            <li><a th:href="@{/logout}" class="nav-item logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <header class="topbar">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome, <span class="admin-name">Admin</span></p>
+        </header>
+
+        <main th:replace="${pageContent}"></main>
+    </div>
+
+</body>
+</html>

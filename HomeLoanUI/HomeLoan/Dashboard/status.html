@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Status | Orlo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body class="text-[#2f2f2f] font-sans min-h-screen">
+
+  <div class="flex min-h-screen">
+
+    <main class="flex-1 p-10 overflow-x-hidden overflow-y-auto max-h-screen">
+      <header class="flex justify-between items-center ">
+        <!-- <h1 class="text-4xl font-extrabold text-[#3a5a40] tracking-wide drop-shadow-md"></h1> -->
+      </header>
+      <div id="rejectionReasonBox" class="mb-10 p-5 bg-green-100 border border-green-300 rounded-xl shadow-md hidden">
+        <h4 class="text-lg font-semibold text-green-700 mb-2">Message From Admin : </h4>
+        <p id="rejectionReasonText" class="text-green-800 text-sm"></p>
+      </div>
+
+
+
+      <section
+        class="bg-white backdrop-blur-md rounded-3xl shadow-2xl border border-[#cad2c5] p-10 max-w-5xl mx-auto text-[#2f2f2f]">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-10">Application Status</h2>
+
+        <div id="statusContainer" class="text-center">
+          <!-- <p class="text-xl mb-4 font-medium tracking-wide">
+            Tracking application ID: <span id="appId" class="font-bold text-[#2f2f2f]"></span>
+          </p> -->
+          <p id="currentStatus" class="text-2xl sm:text-3xl font-extrabold text-[#588157] mb-8 drop-shadow-md"></p>
+
+          <div class="border-t border-[#cad2c5] my-10"></div>
+
+          <h3 class="text-2xl font-bold mb-6 text-left">Status History</h3>
+
+          <div id="history" class="space-y-6 text-left">
+            <!-- Cards will be inserted here -->
+          </div>
+        </div>
+
+        <div id="error" class="text-red-400 text-center hidden mt-6 font-semibold"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    $(document).ready(async function () {
+  const customerData = JSON.parse(localStorage.getItem("customerData"));
+
+  if (!customerData || !customerData.customerId) {
+    window.location.href = "../Cust_Login/customer_login.html";
+    return;
+  }
+
+  const customerId = customerData.customerId;
+  const token = customerData.token;
+  console.log("Token is : "+token);
+  const historyContainer = $("#history").empty();
+
+  try {
+    // Step 1: Get all loan applications for the customer
+    const loanResponse = await fetch(`http://localhost:8080/api/loan/by-customer/${customerId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const loanApplications = await loanResponse.json();
+
+    if (!loanApplications.length) {
+      $("#currentStatus").html("<p class='text-lg text-gray-500'>No applications found.</p>");
+      return;
+    }
+
+    const rejectedApp = loanApplications.find(app => app.rejectionReason && app.rejectionReason.trim() !== "");
+
+    if (rejectedApp) {
+      const statusColor = getStatusColor(rejectedApp.applicationStatus || "rejected");
+
+      const $box = $("#rejectionReasonBox");
+      $box
+        .removeClass("hidden bg-green-100 border-green-300 text-green-700")
+        .addClass(`${statusColor.bg} border ${statusColor.text.replace('text-', 'border-')}`);
+
+      $("#rejectionReasonBox h4").removeClass("text-green-700").addClass(statusColor.text);
+      $("#rejectionReasonText").removeClass("text-green-800").addClass(statusColor.text);
+      $("#rejectionReasonText").text(rejectedApp.rejectionReason);
+    }
+
+    // Step 2: Loop through each application and fetch status
+    for (const application of loanApplications) {
+      const applicationId = application.id;
+
+      const statusResponse = await fetch(`http://localhost:8082/api/application-status/${applicationId}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      const data = await statusResponse.json();
+
+      const statusColor = getStatusColor(data.currentStatus);
+      $("#currentStatus").html(
+        `<span class="text-[#2f2f2f]">${statusColor.emoji} Current:</span> <span class="${statusColor.text} font-bold">${data.currentStatus}</span>`
+      );
+
+      const sortedHistory = data.statusHistory.sort((a, b) => b.id - a.id);
+
+      sortedHistory.forEach(function (entry) {
+        const isInitial = entry.changedByAdminId === null;
+        const color = getStatusColor(entry.status);
+
+        const card = `
+          <div class="p-6 rounded-2xl ${color.bg} border border-[#cad2c5] shadow-md hover:shadow-[0_4px_12px_rgba(52,107,91,0.2)] transition-shadow duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 text-xs font-semibold ${color.badgeBg} text-white px-3 py-1 rounded-bl-xl tracking-wider shadow">
+              ${isInitial ? "Submitted" : "Updated"}
+            </div>
+            <p class="text-lg mb-2"><span class="font-bold">Status:</span> <span class="${color.text}">${entry.status}</span></p>
+            <p class="text-sm"><span class="font-semibold">Date:</span> ${entry.changedAt}</p>
+            <p class="text-sm text-[#6c757d]"><span class="font-semibold">Changed By:</span> ${entry.changedByAdminId ?? "System / User"}</p>
+          </div>
+        `;
+        historyContainer.append(card);
+      });
+    }
+  } catch (error) {
+    $("#error").removeClass("hidden").text(`❌ ${error.message}`);
+    console.error("Error loading application statuses:", error);
+  }
+
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      localStorage.removeItem("customerData");
+      window.location.href = "../Cust_Login/customer_login.html";
+    });
+  }
+
+  function getStatusColor(status) {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return { text: "text-blue-600", bg: "bg-blue-100/50", badgeBg: "bg-blue-600", emoji: "🔵" };
+      case "under review":
+        return { text: "text-yellow-700", bg: "bg-yellow-100/50", badgeBg: "bg-yellow-600", emoji: "🟡" };
+      case "approved":
+        return { text: "text-green-700", bg: "bg-green-100/50", badgeBg: "bg-green-600", emoji: "🟢" };
+      case "rejected":
+        return { text: "text-red-700", bg: "bg-red-100/50", badgeBg: "bg-red-600", emoji: "🔴" };
+      default:
+        return { text: "text-gray-700", bg: "bg-gray-100/50", badgeBg: "bg-gray-600", emoji: "⚪" };
+    }
+  }
+});
+
+  </script>
+
+
+</body>
+
+</html>

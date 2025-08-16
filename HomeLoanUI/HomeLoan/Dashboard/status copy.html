@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Status | Orlo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-[#e8f0e3] to-[#d8edea] text-[#2f2f2f] font-sans min-h-screen">
+
+  <div class="flex min-h-screen">
+
+<main class="flex-1 p-10 overflow-x-hidden overflow-y-auto max-h-screen">
+      <header class="flex justify-between items-center mb-12">
+        <!-- <h1 class="text-4xl font-extrabold text-[#3a5a40] tracking-wide drop-shadow-md"></h1> -->
+      </header>
+
+      <section class="bg-white backdrop-blur-md rounded-3xl shadow-2xl border border-[#cad2c5] p-10 max-w-5xl mx-auto text-[#2f2f2f]">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-10">Application Status</h2>
+        
+        <div id="statusContainer" class="text-center">
+          <!-- <p class="text-xl mb-4 font-medium tracking-wide">
+            Tracking application ID: <span id="appId" class="font-bold text-[#2f2f2f]"></span>
+          </p> -->
+          <p id="currentStatus" class="text-2xl sm:text-3xl font-extrabold text-[#588157] mb-8 drop-shadow-md"></p>
+
+          <div class="border-t border-[#cad2c5] my-10"></div>
+
+          <h3 class="text-2xl font-bold mb-6 text-left">Status History</h3>
+
+          <div id="history" class="space-y-6 text-left">
+            <!-- Cards will be inserted here -->
+          </div>
+        </div>
+
+        <div id="error" class="text-red-400 text-center hidden mt-6 font-semibold"></div>
+      </section>
+    </main>
+  </div>
+
+<script>
+  lucide.createIcons();
+
+   $(document).ready(async function () {
+    const customerData = JSON.parse(localStorage.getItem("customerData"));
+
+    if (!customerData || !customerData.customerId) {
+      window.location.href = "../Cust_Login/customer_login.html";
+      return;
+    }
+
+    const customerId = customerData.customerId;
+    const historyContainer = $("#history").empty();
+
+    try {
+      // Step 1: Get all loan applications for the customer
+      const loanResponse = await fetch(`http://localhost:8080/api/loan/by-customer/${customerId}`);
+      const loanApplications = await loanResponse.json();
+
+      if (loanApplications.length === 0) {
+        $("#currentStatus").html("<p class='text-lg text-gray-500'>No applications found.</p>");
+        return;
+      }
+
+      // Step 2: Loop through each application ID
+      for (const application of loanApplications) {
+        const applicationId = application.id;
+
+        // Step 3: Fetch application status for each applicationId
+        const statusResponse = await fetch(`http://localhost:8082/api/application-status/${applicationId}`);
+        const statusData = await statusResponse.json();
+
+        // Step 4: Render latest status and history
+        const statusColor = getStatusColor(statusData.currentStatus);
+        const sortedHistory = statusData.statusHistory.sort(
+          (a, b) => new Date(b.changedAt) - new Date(a.changedAt)
+        );
+
+        const latestStatusCard = `
+          <div class="p-6 rounded-2xl ${statusColor.bg} border border-[#cad2c5] shadow-md hover:shadow-lg transition duration-300">
+            <div class="flex justify-between mb-2">
+              <p class="text-lg font-semibold text-gray-800">Application ID: ${applicationId}</p>
+              <span class="${statusColor.text} text-sm font-bold">${statusColor.emoji} ${statusData.currentStatus}</span>
+            </div>
+            <p class="text-sm text-gray-600">Applied on: ${application.applicationDate || 'N/A'}</p>
+            <div class="mt-4 space-y-2">
+              ${sortedHistory.map(entry => `
+                <div class="text-sm border-t pt-2">
+                  <span class="font-semibold">${entry.status}</span> on ${entry.changedAt} by ${entry.changedByAdminId ?? "System/User"}
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+
+        historyContainer.append(latestStatusCard);
+      }
+
+    } catch (error) {
+      $("#error").removeClass("hidden").text(`❌ ${error.message}`);
+      console.error("Error loading application statuses:", error);
+    }
+
+
+    function getStatusColor(status) {
+      switch (status.toLowerCase()) {
+        case "submitted":
+          return {
+            text: "text-blue-600",
+            bg: "bg-blue-100/50",
+            badgeBg: "bg-blue-600",
+            emoji: "🔵"
+          };
+        case "under review":
+          return {
+            text: "text-yellow-700",
+            bg: "bg-yellow-100/50",
+            badgeBg: "bg-yellow-600",
+            emoji: "🟡"
+          };
+        case "accepted":
+          return {
+            text: "text-green-700",
+            bg: "bg-green-100/50",
+            badgeBg: "bg-green-600",
+            emoji: "🟢"
+          };
+        case "rejected":
+          return {
+            text: "text-red-700",
+            bg: "bg-red-100/50",
+            badgeBg: "bg-red-600",
+            emoji: "🔴"
+          };
+        default:
+          return {
+            text: "text-gray-700",
+            bg: "bg-gray-100/50",
+            badgeBg: "bg-gray-600",
+            emoji: "⚪"
+          };
+      }
+    }
+
+    // Optional logout handler (if button exists)
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        localStorage.removeItem("customerData");
+        window.location.href = "../Cust_Login/customer_login.html";
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

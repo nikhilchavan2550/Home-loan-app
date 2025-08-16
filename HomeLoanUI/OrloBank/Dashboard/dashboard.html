@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Orlo Bank</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-blue-50 text-blue-950 font-sans">
+
+  <!-- Header -->
+  <header class="bg-sky-100 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="../index.html" class="text-2xl font-bold text-sky-800">Orlo Bank</a>
+      <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:bg-red-600">Logout</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <section class="py-10 px-4 max-w-5xl mx-auto">
+    <h2 class="text-3xl font-semibold mb-6 text-sky-900">Welcome, <span id="customerName">Loading...</span></h2>
+
+    <!-- Customer Details -->
+    <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+      <h3 class="text-xl font-medium mb-4">Customer Details</h3>
+      <div class="grid grid-cols-2 gap-4 text-gray-700">
+        <div><strong>Email:</strong> <span id="email"></span></div>
+        <div><strong>Phone:</strong> <span id="phone"></span></div>
+        <div><strong>Aadhaar:</strong> <span id="aadhaar"></span></div>
+        <div><strong>PAN:</strong> <span id="pan"></span></div>
+      </div>
+    </div>
+
+    <!-- Bank Accounts -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+      <h3 class="text-xl font-medium mb-4">Your Bank Accounts</h3>
+      <div id="accountsContainer" class="space-y-4">
+        <!-- Bank accounts will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Transaction History -->
+
+<div class="bg-white p-8 rounded-2xl shadow-lg mt-12">
+  <h3 class="text-2xl font-semibold mb-6 text-sky-800">Transaction History</h3>
+
+  <div id="transactionHistory" class="space-y-4">
+    
+  </div>
+</div>
+  </section>
+
+  <!-- Deposit Modal -->
+  <div id="depositModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h3 class="text-lg font-bold mb-4">Deposit to Account</h3>
+      <form id="depositForm">
+        <input type="hidden" id="depositAccountNumber" />
+        <label class="block font-medium mb-1">Amount</label>
+        <input type="number" id="depositAmount" required class="w-full mb-4 px-3 py-2 border rounded" />
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('depositModal')" class="text-gray-600 hover:underline">Cancel</button>
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Deposit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Transfer Modal -->
+  <div id="transferModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h3 class="text-lg font-bold mb-4">Transfer Funds</h3>
+      <form id="transferForm">
+        <input type="hidden" id="fromAccount" />
+        <label class="block font-medium mb-1">To Account Number</label>
+        <input type="text" id="toAccount" required class="w-full mb-3 px-3 py-2 border rounded" />
+        <label class="block font-medium mb-1">Amount</label>
+        <input type="number" id="transferAmount" required class="w-full mb-4 px-3 py-2 border rounded" />
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('transferModal')" class="text-gray-600 hover:underline">Cancel</button>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Transfer</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+ <script>
+  const custId = localStorage.getItem("custId");
+  let accountNumber = 0;
+
+  if (!custId) {
+    alert("No user logged in. Redirecting...");
+    window.location.href = "../Login/customer_login.html";
+  }
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR'
+    }).format(value);
+  };
+
+  $(document).ready(function () {
+    // Load customer details
+    $.get(`http://localhost:8084/api/customer/${custId}`, function (data) {
+      $("#customerName").text(data.name);
+      $("#email").text(data.email);
+      $("#phone").text(data.phoneNumber);
+      $("#aadhaar").text(data.aadhaarNumber);
+      $("#pan").text(data.panNumber);
+    });
+
+    // Load accounts
+    // Fetch customer accounts and transaction history
+$.get(`http://localhost:8084/api/customer/${custId}/accounts`, function (accounts) {
+  if (accounts.length === 0) {
+    $("#accountsContainer").html(`<p class="text-gray-500">No accounts found.</p>`);
+    return;
+  }
+
+  // Display accounts
+  accounts.forEach(account => {
+    $("#accountsContainer").append(`
+      <div class="bg-white border border-sky-100 p-5 rounded-xl shadow-sm hover:shadow-md transition">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-sm text-gray-500">Account Number</p>
+            <p class="font-semibold text-lg text-blue-800">${account.accountNumber}</p>
+            <p class="text-sm mt-2 text-gray-500">Balance</p>
+            <p class="text-xl font-bold text-green-700">${formatCurrency(account.balance)}</p>
+          </div>
+          <div class="flex flex-col space-y-2">
+            <button onclick="openDeposit('${account.accountNumber}')" class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700 text-sm">Deposit</button>
+            <button onclick="openTransfer('${account.accountNumber}')" class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700 text-sm">Transfer</button>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+
+  // Get transaction history for the first account
+  const accountId = accounts[0].id;
+  fetchTransactionHistory(accountId);
+});
+
+function fetchTransactionHistory(accountId) {
+  $.get(`http://localhost:8084/api/transaction/account/${accountId}`, function (transactions) {
+    if (!transactions || transactions.length === 0) {
+      $("#transactionHistory").html(`<p class="text-gray-500">No transactions found.</p>`);
+      return;
+    }
+
+    transactions.forEach(tx => {
+      const date = new Date(tx.timestamp).toLocaleString();
+      const amountColor = tx.type === "DEPOSIT" ? "text-green-600" : "text-red-600";
+
+      $("#transactionHistory").append(`
+        <div class="py-4 flex justify-between items-start">
+          <div>
+            <p class="font-medium">${tx.type}</p>
+            <p class="text-sm text-gray-500">${tx.description}</p>
+            <p class="text-xs text-gray-400">${date}</p>
+          </div>
+          <div class="text-right">
+            <p class="font-semibold ${amountColor}">${formatCurrency(tx.amount)}</p>
+          </div>
+        </div>
+      `);
+    });
+  });
+}
+
+
+  });
+
+
+$.get(`http://localhost:8084/api/customer/${custId}/accounts`, function (accounts) {
+  if (accounts.length === 0) return;
+  
+  accountNumber = accounts[0].accountNumber; 
+  
+});
+
+
+  // Modal Functions
+  function openDeposit(accountNumber) {
+    $("#depositAccountNumber").val(accountNumber);
+    $("#depositAmount").val("");
+    $("#depositModal").removeClass("hidden");
+  }
+
+  function openTransfer(accountNumber) {
+    $("#fromAccount").val(accountNumber);
+    $("#toAccount").val("");
+    $("#transferAmount").val("");
+    $("#transferModal").removeClass("hidden");
+  }
+
+  function closeModal(id) {
+    $(`#${id}`).addClass("hidden");
+  }
+
+  // Deposit Submission
+  $("#depositForm").on("submit", function (e) {
+    e.preventDefault();
+    const data = {
+      accountNumber: $("#depositAccountNumber").val(),
+      amount: $("#depositAmount").val()
+    };
+    $.ajax({
+      url: "http://localhost:8084/api/bank/deposit",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function () {
+        alert("Deposit successful!");
+        location.reload();
+      },
+      error: function () {
+        alert("Failed to deposit.");
+      }
+    });
+  });
+
+  // Transfer Submission
+  $("#transferForm").on("submit", function (e) {
+    e.preventDefault();
+    const data = {
+      fromAccount: $("#fromAccount").val(),
+      toAccount: $("#toAccount").val(),
+      amount: $("#transferAmount").val()
+    };
+    $.ajax({
+      url: "http://localhost:8084/api/bank/transfer",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function () {
+        alert("Transfer successful!");
+        location.reload();
+      },
+      error: function () {
+        alert("Transfer failed.");
+      }
+    });
+  });
+
+  function logout() {
+    localStorage.removeItem("custId");
+    window.location.href = "../index.html";
+  }
+</script>
+
+
+</body>
+</html>

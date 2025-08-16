@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orlo Bank</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    
+    canvas { display: block; }
+    .fade-in-up { animation: fadeInUp 1s ease-out; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-blue-50 text-blue-950 font-sans">
+
+  <!-- Navigation -->
+  <header class="bg-sky-100 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-sky-800">Orlo Bank</h1>
+        <div id="navLinks" class="space-x-4">
+          <!-- Dynamic links inserted here -->
+        </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Section with 3D Globe -->
+  <section class="relative bg-gradient-to-br from-sky-100 to-blue-50 py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col-reverse lg:flex-row items-center justify-between fade-in-up">
+      <div class="text-center lg:text-left max-w-xl pl-4 sm:pl-8 lg:pl-12"> <!-- 👈 Added left padding -->
+        <h2 class="text-4xl sm:text-5xl font-bold text-sky-900 mb-4">Welcome to Orlo Bank</h2>
+        <p class="text-lg text-sky-700 mb-6">A reimagined banking experience built for global visionaries. Secure, intelligent, and personalized banking at your fingertips.</p>
+        <div class="space-x-4">
+          <a href="Register/create_account.html" class="bg-sky-700 text-white px-6 py-3 rounded-full text-lg hover:bg-sky-800">Get Started</a>
+          <a href="#features" class="text-sky-700 font-medium hover:underline text-lg">Explore Features</a>
+        </div>
+      </div>
+      <div class="w-full lg:w-[500px] h-[500px]">
+        <canvas id="globeCanvas" class="w-full h-full"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20 bg-sky-50">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-semibold text-sky-900 mb-12">Our Core Features</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <div class="text-sky-600 mb-4 text-3xl">🔐</div>
+          <h4 class="font-semibold text-lg mb-2">Bank-Grade Security</h4>
+          <p class="text-sky-700 text-sm">Multi-layer encryption, real-time alerts, and AI-powered fraud detection to keep your money safe.</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <div class="text-sky-600 mb-4 text-3xl">🌐</div>
+          <h4 class="font-semibold text-lg mb-2">Global Financial Reach</h4>
+          <p class="text-sky-700 text-sm">Instant global transfers and currency management with just a few taps.</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <div class="text-sky-600 mb-4 text-3xl">🤖</div>
+          <h4 class="font-semibold text-lg mb-2">Smart Investing</h4>
+          <p class="text-sky-700 text-sm">Grow your portfolio with predictive analytics and real-time AI guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Call to Action -->
+  <section class="py-20 bg-sky-700 text-white text-center">
+    <h3 class="text-3xl font-semibold mb-4">Join the Future of Finance with Orlo Bank</h3>
+    <p class="mb-6 text-lg">Open your account in minutes. Start investing, saving, and managing globally today.</p>
+    <a href="Register/create_account.html" class="bg-white text-sky-700 px-6 py-3 rounded-full text-lg hover:bg-sky-100">Open Your Account</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-sky-100 py-8 text-center text-sm text-sky-700">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="mb-4">© 2025 Orlo Bank. All rights reserved.</div>
+      <div class="space-x-4">
+        <a href="#" class="hover:underline">Privacy Policy</a>
+        <a href="#" class="hover:underline">Terms of Use</a>
+        <a href="Login/customer_login.html" class="hover:underline">Login</a>
+        <a href="#" class="hover:underline">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 3D Globe Script -->
+  <script src="scripts.js"></script>
+
+</body>
+</html>
