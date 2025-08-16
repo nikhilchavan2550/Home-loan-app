@@ -5,7 +5,7 @@ A comprehensive home loan management system with a microservices architecture fe
 ## About the Developer
 **Nikhil Chavan**
 - Full Stack Developer at Oracle Banking Digital Experience (OBDX) Department
-- Previously: Software Engineer at PICT
+- Previously: Student at PICT
 - Skilled in full stack development with expertise in banking domain applications
 
 ## Live Demo
