@@ -2,6 +2,12 @@
 
 A comprehensive home loan management system with a microservices architecture featuring user authentication, loan application processing, EMI calculation, and admin dashboards.
 
+## About the Developer
+**Nikhil Chavan**
+- Full Stack Developer at Oracle Banking Digital Experience (OBDX) Department
+- Previously: Software Engineer at PICT
+- Skilled in full stack development with expertise in banking domain applications
+
 ## Live Demo
 [![Live Demo Video](https://img.youtube.com/vi/LyEy0jTBzfs/0.jpg)](https://youtu.be/LyEy0jTBzfs)
 
@@ -25,7 +31,14 @@ A comprehensive home loan management system with a microservices architecture fe
   - Home Loan Status Service
   - Loan App Service
   - Orlo Bank Service
-- **Frontend**: HTML, CSS, JavaScript
+  - RESTful APIs
+  - Spring Security
+  - Spring Data JPA
+  - Hibernate
+- **Frontend**: 
+  - HTML, CSS, JavaScript
+  - Knockout.js
+  - Oracle JET
 - **Authentication**: Google OAuth
 - **Email Service**: Node.js with Nodemailer
 - **Build Tools**: Maven, npm
@@ -98,13 +111,5 @@ HomeLoan-main/
 3. Upload required documents
 4. Calculate EMI using the EMI calculator
 5. Submit the application
-6. Track application status in the dashboard
-7. Admin users can review and process applications in the admin panel
-
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-© 2025 Home Loan Application. All rights reserved.
+6. Track application status in real-time
+7. Admin users can review and process applications through the admin dashboard
